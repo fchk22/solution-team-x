@@ -37,47 +37,12 @@ const translations: any = {
     fullNamePlaceholder: "e.g. Tommy Leung",
     incomeLabel: "Annual Income (HKD)",
     selectRange: "Select Range",
-    incomes: {
-      range1: "Below $200,000",
-      range2: "$200,000 - $400,000",
-      range3: "$400,000 - $600,000",
-      range4: "Above $600,000"
-    },
-    employments: {
-      fullTime: "Full-time",
-      partTime: "Part-time",
-      contract: "Contract",
-      selfEmployed: "Self-employed",
-      unemployed: "Unemployed"
-    },
-    residencies: {
-      permanent: "HK Permanent Resident",
-      nonResidentCN: "Non-Resident Chinese (Mainland)",
-      talent: "Talent Visa (IANG/TTPS)",
-      student: "Non-local Student"
-    },
-    goalsList: {
-      Dining: "Dining",
-      Travel: "Travel",
-      Online: "Online",
-      Insurance: "Insurance",
-      Supermarket: "Supermarket"
-    },
-    relationsList: {
-      'HSBC Payroll': "HSBC Payroll",
-      'HSBC Mortgage': "HSBC Mortgage",
-      'HSBC MPF': "HSBC MPF",
-      'Existing Cardholder': "Existing Cardholder"
-    },
-    sectors: {
-      Gov: "Government / Civil Servant",
-      Edu: "Education / Teacher",
-      Fin: "Banking & Finance",
-      Med: "Medical / Professional",
-      NGO: "NGO / Social Work",
-      Self: "Self-Employed / Business Owner",
-      Others: "Others / Private Sector"
-    }
+    incomes: { range1: "Below $200,000", range2: "$200,000 - $400,000", range3: "$400,000 - $600,000", range4: "Above $600,000" },
+    employments: { fullTime: "Full-time", partTime: "Part-time", contract: "Contract", selfEmployed: "Self-employed", unemployed: "Unemployed" },
+    residencies: { permanent: "HK Permanent Resident", nonResidentCN: "Non-Resident Chinese (Mainland)", talent: "Talent Visa (IANG/TTPS)", student: "Non-local Student" },
+    goalsList: { Dining: "Dining", Travel: "Travel", Online: "Online", Insurance: "Insurance", Supermarket: "Supermarket" },
+    relationsList: { 'HSBC Payroll': "HSBC Payroll", 'HSBC Mortgage': "HSBC Mortgage", 'HSBC MPF': "HSBC MPF", 'Existing Cardholder': "Existing Cardholder" },
+    sectors: { Gov: "Government / Civil Servant", Edu: "Education / Teacher", Fin: "Banking & Finance", Med: "Medical / Professional", NGO: "NGO / Social Work", Self: "Self-Employed / Business Owner", Others: "Others / Private Sector" }
   },
   zh: {
     title: "賺盡回贈。",
@@ -102,47 +67,12 @@ const translations: any = {
     fullNamePlaceholder: "例如：Tommy Leung",
     incomeLabel: "年收入 (HKD)",
     selectRange: "請選擇範圍",
-    incomes: {
-      range1: "$200,000 以下",
-      range2: "$200,000 - $400,000",
-      range3: "$400,000 - $600,000",
-      range4: "$600,000 以上"
-    },
-    employments: {
-      fullTime: "全職",
-      partTime: "兼職",
-      contract: "合約員工",
-      selfEmployed: "自僱人士",
-      unemployed: "待業"
-    },
-    residencies: {
-      permanent: "香港永久性居民",
-      nonResidentCN: "非本地居民 (內地)",
-      talent: "人才簽證 (IANG/高才通)",
-      student: "非本地學生"
-    },
-    goalsList: {
-      Dining: "餐飲",
-      Travel: "旅遊",
-      Online: "網購",
-      Insurance: "保險",
-      Supermarket: "超級市場"
-    },
-    relationsList: {
-      'HSBC Payroll': "滙豐出糧戶口",
-      'HSBC Mortgage': "滙豐按揭",
-      'HSBC MPF': "滙豐強積金",
-      'Existing Cardholder': "現有信用卡客戶"
-    },
-    sectors: {
-      Gov: "政府人員 / 公務員",
-      Edu: "教育界 / 教師",
-      Fin: "銀行及金融業",
-      Med: "醫療 / 專業人士",
-      NGO: "非牟利機構 / 社工",
-      Self: "自僱 / 營商",
-      Others: "其他 / 私營機構"
-    }
+    incomes: { range1: "$200,000 以下", range2: "$200,000 - $400,000", range3: "$400,000 - $600,000", range4: "$600,000 以上" },
+    employments: { fullTime: "全職", partTime: "兼職", contract: "合約員工", selfEmployed: "自僱人士", unemployed: "待業" },
+    residencies: { permanent: "香港永久性居民", nonResidentCN: "非本地居民 (內地)", talent: "人才簽證 (IANG/高才通)", student: "非本地學生" },
+    goalsList: { Dining: "餐飲", Travel: "旅遊", Online: "網購", Insurance: "保險", Supermarket: "超級市場" },
+    relationsList: { 'HSBC Payroll': "滙豐出糧戶口", 'HSBC Mortgage': "滙豐按揭", 'HSBC MPF': "滙豐強積金", 'Existing Cardholder': "現有信用卡客戶" },
+    sectors: { Gov: "政府人員 / 公務員", Edu: "教育界 / 教師", Fin: "銀行及金融業", Med: "醫療 / 專業人士", NGO: "非牟利機構 / 社工", Self: "自僱 / 營商", Others: "其他 / 私營機構" }
   },
   cn: {
     title: "赚尽回赠。",
@@ -167,71 +97,21 @@ const translations: any = {
     fullNamePlaceholder: "例如：Tommy Leung",
     incomeLabel: "年收入 (HKD)",
     selectRange: "请选择范围",
-    incomes: {
-      range1: "$200,000 以下",
-      range2: "$200,000 - $400,000",
-      range3: "$400,000 - $600,000",
-      range4: "$600,000 以上"
-    },
-    employments: {
-      fullTime: "全职",
-      partTime: "兼职",
-      contract: "合约员工",
-      selfEmployed: "自雇人士",
-      unemployed: "待业"
-    },
-    residencies: {
-      permanent: "香港永久性居民",
-      nonResidentCN: "非本地居民 (内地)",
-      talent: "人才签证 (IANG/高才通)",
-      student: "非本地学生"
-    },
-    goalsList: {
-      Dining: "餐饮",
-      Travel: "旅游",
-      Online: "网购",
-      Insurance: "保险",
-      Supermarket: "超市"
-    },
-    relationsList: {
-      'HSBC Payroll': "汇丰代发工资账户",
-      'HSBC Mortgage': "汇丰按揭",
-      'HSBC MPF': "汇丰强积金",
-      'Existing Cardholder': "现有信用卡客户"
-    },
-    sectors: {
-      Gov: "政府人员 / 公务员",
-      Edu: "教育人员 / 教师",
-      Fin: "银行及金融业",
-      Med: "医疗 / 专业人士",
-      NGO: "非营利机构 / 社工",
-      Self: "自雇 / 营商",
-      Others: "其他 / 私营机构"
-    }
+    incomes: { range1: "$200,000 以下", range2: "$200,000 - $400,000", range3: "$400,000 - $600,000", range4: "$600,000 以上" },
+    employments: { fullTime: "全职", partTime: "兼职", contract: "合约员工", selfEmployed: "自雇人士", unemployed: "待业" },
+    residencies: { permanent: "香港永久性居民", nonResidentCN: "非本地居民 (内地)", talent: "人才签证 (IANG/高才通)", student: "非本地学生" },
+    goalsList: { Dining: "餐饮", Travel: "旅游", Online: "网购", Insurance: "保险", Supermarket: "超市" },
+    relationsList: { 'HSBC Payroll': "汇丰代发工资账户", 'HSBC Mortgage': "汇丰按揭", 'HSBC MPF': "汇丰强积金", 'Existing Cardholder': "现有信用卡客户" },
+    sectors: { Gov: "政府人员 / 公务员", Edu: "教育人员 / 教师", Fin: "银行及金融业", Med: "医疗 / 专业人士", NGO: "非营利机构 / 社工", Self: "自雇 / 营商", Others: "其他 / 私营机构" }
   }
 }
 
-interface ChatMessage {
-  role: 'user' | 'ai';
-  content: string;
-  tier?: 'PRO' | 'LOGGED_IN_NO_PROFILE' | 'GUEST'; 
-}
-
-interface UserProfile {
-  fullName: string;
-  income: string;
-  residencyStatus: string; 
-  primarySpend: string; 
-  occupation: string;
-  employment_type: string; 
-  ownedCards: string[]; 
-  language: 'en' | 'zh' | 'cn';
-}
+interface ChatMessage { role: 'user' | 'ai'; content: string; tier?: 'PRO' | 'LOGGED_IN_NO_PROFILE' | 'GUEST'; }
+interface UserProfile { fullName: string; income: string; residencyStatus: string; primarySpend: string; occupation: string; employment_type: string; ownedCards: string[]; language: 'en' | 'zh' | 'cn'; }
 
 export default function HomePage() {
   const [lang, setLang] = useState<'en' | 'zh' | 'cn'>('en')
   const t = translations[lang] || translations['en']
-  
   const [question, setQuestion] = useState('')
   const [history, setHistory] = useState<ChatMessage[]>([])
   const [loading, setLoading] = useState(false)
@@ -239,14 +119,8 @@ export default function HomePage() {
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [userProfile, setUserProfile] = useState<UserProfile>({
-    fullName: '',
-    income: '', 
-    residencyStatus: '', 
-    primarySpend: '', 
-    occupation: '', 
-    employment_type: 'Full-time', 
-    ownedCards: [], 
-    language: 'en'
+    fullName: '', income: '', residencyStatus: '', primarySpend: '', occupation: '', 
+    employment_type: 'Full-time', ownedCards: [], language: 'en'
   })
   
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -262,16 +136,17 @@ export default function HomePage() {
       if (session?.user) {
         const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).maybeSingle()
         if (profile) {
+          // FIX: Correctly mapping snake_case database columns to camelCase state interface
           setUserProfile({
             fullName: profile.full_name || '',
             income: profile.income || '',
-            residency_status: profile.residency_status || '',
-            primary_spend: profile.primary_spend || '',
+            residencyStatus: profile.residency_status || '',
+            primarySpend: profile.primary_spend || '',
             occupation: profile.occupation || '',
             employment_type: profile.employment_type || 'Full-time',
-            owned_cards: profile.owned_cards || [],
-            preferred_language: (profile.preferred_language as any) || 'en'
-          } as any)
+            ownedCards: profile.owned_cards || [],
+            language: (profile.preferred_language as any) || 'en'
+          })
           setLang((profile.preferred_language as any) || 'en')
         }
       }
@@ -279,20 +154,8 @@ export default function HomePage() {
     checkUser()
   }, [])
 
-  const handleUserHubClick = () => {
-    if (!user) {
-      signInWithGoogle()
-    } else {
-      setIsProfileOpen(true)
-    }
-  }
-
-  const handleLogout = async () => {
-    await signOut()
-    setIsProfileOpen(false)
-    setUser(null)
-    window.location.reload()
-  }
+  const handleUserHubClick = () => { if (!user) { signInWithGoogle() } else { setIsProfileOpen(true) } }
+  const handleLogout = async () => { await signOut(); setIsProfileOpen(false); setUser(null); window.location.reload(); }
 
   const saveProfile = async () => {
     if (!user) return;
@@ -310,33 +173,20 @@ export default function HomePage() {
         preferred_language: lang,
         updated_at: new Date().toISOString(),
       });
-
-      if (error) {
-        alert(`Error: ${error.message}`);
-      } else {
-        setIsProfileOpen(false);
-        const { data: { session } } = await supabase.auth.getSession()
-        setUser(session?.user ?? null)
-      }
-    } catch (err) {
-      console.error("Unexpected error:", err);
-    } finally {
-      setIsSaving(false);
-    }
+      if (error) { alert(`Error: ${error.message}`); } 
+      else { setIsProfileOpen(false); const { data: { session } } = await supabase.auth.getSession(); setUser(session?.user ?? null); }
+    } catch (err) { console.error("Unexpected error:", err); } finally { setIsSaving(false); }
   };
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || loading) return
     setHistory(prev => [...prev, { role: 'user', content: text }])
-    setLoading(true)
-    setQuestion('')
+    setLoading(true); setQuestion('')
     try {
-      const profileToPass = user ? userProfile : null
-      const result = await askCardExpert(text, profileToPass)
+      const result = await askCardExpert(text, user ? userProfile : null)
       setHistory(prev => [...prev, { role: 'ai', content: result.answer, tier: result.tier as any }])
-    } catch (err) {
-      setHistory(prev => [...prev, { role: 'ai', content: "Error connecting to AI." }])
-    } finally { setLoading(false) }
+    } catch (err) { setHistory(prev => [...prev, { role: 'ai', content: "Error connecting to AI." }]) } 
+    finally { setLoading(false) }
   }
 
   return (
@@ -346,32 +196,22 @@ export default function HomePage() {
       <header className="shrink-0 bg-white border-b px-4 sm:px-6 py-3 z-[100] shadow-sm pt-[calc(0.75rem+env(safe-area-inset-top))]">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="bg-indigo-600 p-2 rounded-xl shadow-sm">
-              <CreditCard className="text-white w-4 h-4 sm:w-5 sm:h-5" />
-            </div>
+            <div className="bg-indigo-600 p-2 rounded-xl shadow-sm"><CreditCard className="text-white w-4 h-4 sm:w-5 sm:h-5" /></div>
             <div className="block">
               <h1 className="text-sm sm:text-lg font-black tracking-tight leading-none">SolutionTeamX</h1>
               <span className="text-[8px] sm:text-[9px] text-indigo-600 font-bold uppercase tracking-wider">Smart Engine</span>
             </div>
           </div>
-          
           <div className="flex items-center gap-2 sm:gap-4">
             <div className="flex bg-slate-100 p-0.5 sm:p-1 rounded-lg">
               {['en', 'zh', 'cn'].map((id) => (
-                <button key={id} onClick={() => setLang(id as any)}
-                  className={`px-2 sm:px-3 py-1 text-[9px] sm:text-[10px] font-black rounded-md transition-all ${lang === id ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-400 hover:text-slate-600'}`}
-                >
-                  {id === 'en' ? 'ENG' : id === 'zh' ? '繁' : id === 'cn' ? '简' : ''}
+                <button key={id} onClick={() => setLang(id as any)} className={`px-2 sm:px-3 py-1 text-[9px] sm:text-[10px] font-black rounded-md transition-all ${lang === id ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-400 hover:text-slate-600'}`}>
+                  {id === 'en' ? 'ENG' : id === 'zh' ? '繁' : '简'}
                 </button>
               ))}
             </div>
-
             <button onClick={handleUserHubClick} className={`flex items-center gap-2 px-3 py-2 rounded-xl text-[10px] sm:text-xs font-black transition-all shadow-md active:scale-95 border ${user ? 'bg-white border-indigo-100 text-indigo-600' : 'bg-indigo-600 border-indigo-600 text-white'}`}>
-              {user ? (
-                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-indigo-100 flex items-center justify-center overflow-hidden">
-                   {user.user_metadata?.avatar_url ? <img src={user.user_metadata.avatar_url} alt="avatar" /> : <User className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}
-                </div>
-              ) : <LogIn className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+              {user ? (<div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-indigo-100 flex items-center justify-center overflow-hidden">{user.user_metadata?.avatar_url ? <img src={user.user_metadata.avatar_url} alt="avatar" /> : <User className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}</div>) : <LogIn className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
               <span className="hidden xs:inline">{user ? (userProfile.fullName || t.profile) : t.login}</span>
             </button>
           </div>
@@ -382,9 +222,7 @@ export default function HomePage() {
       <main className="flex-1 overflow-y-auto w-full max-w-4xl mx-auto p-4 sm:p-6 [&::-webkit-scrollbar]:hidden">
         {history.length === 0 && !loading && (
           <div className="min-h-full flex flex-col justify-center items-center text-center py-10 animate-in fade-in zoom-in duration-500">
-             <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-4 py-2 rounded-full text-[10px] font-black mb-6 border border-indigo-100 uppercase tracking-widest">
-               <Sparkles className="w-3.5 h-3.5"/> Next-Gen AI Power
-             </div>
+             <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-4 py-2 rounded-full text-[10px] font-black mb-6 border border-indigo-100 uppercase tracking-widest"><Sparkles className="w-3.5 h-3.5"/> Next-Gen AI Power</div>
              <h2 className="text-4xl sm:text-6xl font-black mb-4 tracking-tighter text-slate-900 leading-tight">{t.title}</h2>
              <p className="text-slate-500 text-sm sm:text-base mb-10 max-w-lg font-medium leading-relaxed">{t.subtitle}</p>
              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl">
@@ -396,14 +234,11 @@ export default function HomePage() {
              </div>
           </div>
         )}
-
         <div className="space-y-6">
           {history.map((chat, i) => (
             <div key={i} className={`flex flex-col ${chat.role === 'user' ? 'items-end' : 'items-start'}`}>
               <div className={`max-w-[90%] sm:max-w-[85%] p-4 rounded-2xl border ${chat.role === 'user' ? 'bg-slate-900 text-white border-slate-800' : 'bg-white text-slate-800 border-slate-100 shadow-sm'}`}>
-                <div className="text-xs sm:text-sm prose prose-sm max-w-none prose-slate">
-                  <ReactMarkdown>{chat.content}</ReactMarkdown>
-                </div>
+                <div className="text-xs sm:text-sm prose prose-sm max-w-none prose-slate"><ReactMarkdown>{chat.content}</ReactMarkdown></div>
               </div>
               {chat.tier && <span className="text-[8px] font-black mt-1 text-slate-300 uppercase tracking-tighter px-2">Model: {chat.tier}</span>}
             </div>
@@ -417,26 +252,10 @@ export default function HomePage() {
       <footer className="shrink-0 bg-white border-t p-3 sm:p-4 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] z-50 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <div className="max-w-4xl mx-auto">
           <div className="relative mb-2">
-            <input 
-              type="text" 
-              placeholder={t.placeholder} 
-              className="w-full bg-slate-100 rounded-2xl px-4 py-3 sm:py-4 pr-12 sm:pr-14 outline-none focus:ring-2 focus:ring-indigo-500 text-xs sm:text-sm font-medium" 
-              value={question} 
-              onChange={(e) => setQuestion(e.target.value)} 
-              onKeyDown={(e) => e.key === 'Enter' && sendMessage(question)}
-            />
-            <button 
-              onClick={() => sendMessage(question)} 
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-indigo-600 text-white p-2 sm:p-2.5 rounded-xl shadow-md active:scale-95 transition-transform"
-            >
-              <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </button>
+            <input type="text" placeholder={t.placeholder} className="w-full bg-slate-100 rounded-2xl px-4 py-3 sm:py-4 pr-12 sm:pr-14 outline-none focus:ring-2 focus:ring-indigo-500 text-xs sm:text-sm font-medium" value={question} onChange={(e) => setQuestion(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && sendMessage(question)}/>
+            <button onClick={() => sendMessage(question)} className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-indigo-600 text-white p-2 sm:p-2.5 rounded-xl shadow-md active:scale-95 transition-transform"><Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></button>
           </div>
-          <div className="flex justify-center text-[8px] sm:text-[10px] text-slate-500 font-medium px-2 text-center">
-            <span className="flex items-center gap-1">
-              <AlertCircle className="w-2.5 h-2.5 text-amber-600 shrink-0"/> {t.disclaimer}
-            </span>
-          </div>
+          <div className="flex justify-center text-[8px] sm:text-[10px] text-slate-500 font-medium px-2 text-center flex items-center gap-1"><AlertCircle className="w-2.5 h-2.5 text-amber-600 shrink-0"/> {t.disclaimer}</div>
         </div>
       </footer>
 
@@ -452,21 +271,14 @@ export default function HomePage() {
                  <button onClick={() => setIsProfileOpen(false)}><X className="w-5 h-5 text-slate-400" /></button>
               </div>
             </div>
-            
             <div className="space-y-6 flex-1 overflow-y-auto pr-2 pb-6 [&::-webkit-scrollbar]:hidden">
-              
               <div className="bg-indigo-50 border border-indigo-100 p-4 rounded-2xl flex gap-3 items-center shrink-0">
-                <Sparkles className="w-5 h-5 text-indigo-600 shrink-0" />
-                <p className="text-[10px] sm:text-[11px] text-indigo-900 font-bold m-0 leading-tight">
-                  {t.profileRemark}
-                </p>
+                <Sparkles className="w-5 h-5 text-indigo-600 shrink-0" /><p className="text-[10px] sm:text-[11px] text-indigo-900 font-bold m-0 leading-tight">{t.profileRemark}</p>
               </div>
-
               <div className="space-y-1.5">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1"><UserCircle className="w-3 h-3"/> {t.fullNameLabel}</label>
                 <input type="text" placeholder={t.fullNamePlaceholder} value={userProfile.fullName} onChange={(e) => setUserProfile({...userProfile, fullName: e.target.value})} className="w-full p-3 bg-slate-50 border rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-indigo-500 transition-all"/>
               </div>
-
               <div className="space-y-1.5">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1"><Landmark className="w-3 h-3"/> {t.incomeLabel}</label>
                 <select value={userProfile.income} onChange={(e) => setUserProfile({...userProfile, income: e.target.value})} className="w-full p-3 bg-slate-50 border rounded-xl text-xs font-bold outline-none cursor-pointer">
@@ -477,7 +289,6 @@ export default function HomePage() {
                   <option value="Above $600k">{t.incomes.range4}</option>
                 </select>
               </div>
-
               <div className="space-y-1.5">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1"><Briefcase className="w-3 h-3"/> {t.sector}</label>
                 <select value={userProfile.occupation} onChange={(e) => setUserProfile({...userProfile, occupation: e.target.value})} className="w-full p-3 bg-slate-50 border rounded-xl text-xs font-bold outline-none">
@@ -485,7 +296,6 @@ export default function HomePage() {
                   {Object.entries(t.sectors).map(([key, val]) => (<option key={key} value={key}>{val as string}</option>))}
                 </select>
               </div>
-
               <div className="space-y-1.5">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1"><Clock className="w-3 h-3"/> {t.employment}</label>
                 <select value={userProfile.employment_type} onChange={(e) => setUserProfile({...userProfile, employment_type: e.target.value})} className="w-full p-3 bg-slate-50 border rounded-xl text-xs font-bold outline-none">
@@ -496,7 +306,6 @@ export default function HomePage() {
                   <option value="Unemployed">{t.employments.unemployed}</option>
                 </select>
               </div>
-
               <div className="space-y-1.5">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1"><MapPin className="w-3 h-3"/> {t.residency}</label>
                 <select value={userProfile.residencyStatus} onChange={(e) => setUserProfile({...userProfile, residencyStatus: e.target.value})} className="w-full p-3 bg-slate-50 border rounded-xl text-xs font-bold outline-none">
@@ -507,7 +316,6 @@ export default function HomePage() {
                   <option value="Student">{t.residencies.student}</option>
                 </select>
               </div>
-
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1"><ShoppingBag className="w-3 h-3"/> {t.goals}</label>
                 <div className="flex flex-wrap gap-2">
@@ -519,34 +327,31 @@ export default function HomePage() {
                       }}
                       className={`px-3 py-2 rounded-lg text-[10px] font-bold border transition-all flex items-center gap-1 ${(userProfile.primarySpend || '').includes(goal) ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white text-slate-500 border-slate-200 hover:border-indigo-200'}`}
                     >
-                      {(userProfile.primarySpend || '').includes(goal) && <CheckCircle2 className="w-3 h-3" />}
-                      {t.goalsList[goal]}
+                      {(userProfile.primarySpend || '').includes(goal) && <CheckCircle2 className="w-3 h-3" />} {t.goalsList[goal]}
                     </button>
                   ))}
                 </div>
               </div>
-
               <div className="space-y-2 pb-4">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1"><Landmark className="w-3 h-3"/> {t.relationship}</label>
                 <div className="grid grid-cols-2 gap-2">
                   {['HSBC Payroll', 'HSBC Mortgage', 'HSBC MPF', 'Existing Cardholder'].map(rel => (
                     <button key={rel} type="button" onClick={() => {
-                        const next = userProfile.ownedCards.includes(rel) ? userProfile.ownedCards.filter(c => c !== rel) : [...userProfile.ownedCards, rel];
+                        // FIX: Added safety check ?? [] to ensure ownedCards is always iterable
+                        const currentCards = userProfile.ownedCards ?? [];
+                        const next = currentCards.includes(rel) ? currentCards.filter(c => c !== rel) : [...currentCards, rel];
                         setUserProfile({...userProfile, ownedCards: next});
                       }} 
-                      className={`text-[9px] p-2.5 rounded-xl border font-black transition-all flex items-center justify-center gap-1.5 ${userProfile.ownedCards.includes(rel) ? 'bg-indigo-600 border-indigo-600 text-white shadow-md' : 'bg-white border-slate-100 text-slate-500 hover:border-indigo-200'}`}
+                      className={`text-[9px] p-2.5 rounded-xl border font-black transition-all flex items-center justify-center gap-1.5 ${(userProfile.ownedCards ?? []).includes(rel) ? 'bg-indigo-600 border-indigo-600 text-white shadow-md' : 'bg-white border-slate-100 text-slate-500 hover:border-indigo-200'}`}
                     >
-                      {userProfile.ownedCards.includes(rel) && <CheckCircle2 className="w-3 h-3" />}
-                      {t.relationsList[rel]}
+                      {(userProfile.ownedCards ?? []).includes(rel) && <CheckCircle2 className="w-3 h-3" />} {t.relationsList[rel]}
                     </button>
                   ))}
                 </div>
               </div>
             </div>
-            
-            <button onClick={saveProfile} disabled={isSaving} className="w-full mt-4 shrink-0 bg-indigo-600 text-white py-4 rounded-2xl font-black text-[11px] shadow-xl hover:bg-indigo-700 disabled:bg-slate-300 transition-all flex items-center justify-center gap-2 active:scale-[0.98] uppercase tracking-tighter">
-              {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />} 
-              {isSaving ? t.saving : t.save}
+            <button onClick={saveProfile} disabled={isSaving} className="w-full mt-4 shrink-0 bg-indigo-600 text-white py-4 rounded-2xl font-black text-[11px] shadow-xl hover:bg-indigo-700 disabled:bg-slate-300 transition-all flex items-center justify-center gap-2 active:scale-95 uppercase tracking-tighter">
+              {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />} {isSaving ? t.saving : t.save}
             </button>
           </div>
         </>
