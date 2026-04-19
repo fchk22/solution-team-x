@@ -20,7 +20,7 @@ const translations: any = {
     login: "Sign In",
     logout: "Sign Out",
     profile: "User Profile",
-    headerLabel: "Card Rebate",
+    headerLabel: "AI REBATE HUNTER",
     aiEnabled: "AI Rebate Hunter",
     nudgeGuest: "Log in & complete profile to unlock high-speed VIP AI!",
     nudgeBasic: "Complete your profile to unlock high-speed VIP AI!",
@@ -86,7 +86,7 @@ const translations: any = {
     login: "登入",
     logout: "登出",
     profile: "個人檔案",
-    headerLabel: "信用卡回贈",
+    headerLabel: "AI 回贈獵人",
     aiEnabled: "AI 回贈獵人",
     nudgeGuest: "立即登入並填寫資料，開啟 VIP 高速 AI 模式！",
     nudgeBasic: "填寫資料，開啟 VIP 高速 AI 模式！",
@@ -152,7 +152,7 @@ const translations: any = {
     login: "登录",
     logout: "登出",
     profile: "个人资料",
-    headerLabel: "信用卡返现",
+    headerLabel: "AI 返现猎人",
     aiEnabled: "AI 返现猎人",
     nudgeGuest: "立即登录并填写资料，开启 VIP 高速 AI 模式！",
     nudgeBasic: "填写资料，开启 VIP 高速 AI 模式！",
@@ -334,18 +334,33 @@ export default function HomePage() {
     setHistory(prev => [...prev, { role: 'user', content: text }])
     setLoading(true)
     setQuestion('')
+    
     try {
-      const profileData = userTier === 'VIP' ? userProfile : null;
-      const result = await askCardExpert(text, profileData)
-      setHistory(prev => [...prev, { role: 'ai', content: result.answer, tier: userTier as any }])
+      // FIX: Pass the boolean 'true' if the user is VIP, otherwise 'false'
+      const isVipUser = userTier === 'VIP'; 
+      const result = await askCardExpert(text, isVipUser);
+      
+      if (!result || !result.success || !result.answer) {
+        throw new Error(result?.error || "Empty response from AI");
+      }
+
+      let cleanAnswer = result.answer.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+
+      if (!cleanAnswer) {
+        cleanAnswer = "Sorry, I had trouble formatting my response. Could you ask that again?";
+      }
+
+      setHistory(prev => [...prev, { role: 'ai', content: cleanAnswer, tier: userTier as any }])
     } catch (err) {
+      console.error("Chat error:", err);
       setHistory(prev => [...prev, { role: 'ai', content: "Error connecting to AI engine." }])
-    } finally { setLoading(false) }
+    } finally { 
+      setLoading(false) 
+    }
   }
 
   return (
     <div className="h-dvh bg-slate-50 text-slate-900 flex flex-col relative font-sans overflow-hidden">
-      
       {/* HEADER */}
       <header className="shrink-0 bg-white border-b px-4 sm:px-6 py-3 z-[100] shadow-sm pt-[calc(0.75rem+env(safe-area-inset-top))]">
         <div className="max-w-5xl mx-auto flex items-center justify-between relative">
@@ -354,8 +369,15 @@ export default function HomePage() {
               <CreditCard className="text-white w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <h1 className="text-sm sm:text-lg font-black tracking-tight leading-none">SolutionTeamX</h1>
-              <span className="text-[8px] sm:text-[9px] text-indigo-600 font-bold uppercase tracking-wider">{t.headerLabel}</span>
+              <h1 className="text-sm sm:text-lg font-black tracking-tight leading-none text-slate-900">
+                SolutionTeamX
+              </h1>
+              {/* REPLACED "Card Rebate" with "AI REBATE HUNTER" */}
+              <div className="flex items-center gap-1.5 mt-1">
+                <span className="text-[11px] sm:text-xs text-indigo-600 font-black uppercase tracking-[0.1em] block">
+                  {t.headerLabel}
+                </span>
+              </div>
             </div>
           </div>
           
@@ -365,7 +387,7 @@ export default function HomePage() {
                 <button 
                   key={id} 
                   onClick={() => setLang(id as any)}
-                  className={`px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-black rounded-md transition-all ${
+                  className={`px-3 py-1.5 text-xs sm:text-sm font-black rounded-md transition-all ${
                     lang === id ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-400 hover:text-slate-600'
                   }`}
                 >
@@ -383,15 +405,18 @@ export default function HomePage() {
               >
                 {user ? (
                   <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-indigo-100 flex items-center justify-center overflow-hidden">
-                     {user.user_metadata?.avatar_url ? <img src={user.user_metadata.avatar_url} alt="avatar" /> : <User className="w-4 h-4" />}
+                    {user.user_metadata?.avatar_url ? <img src={user.user_metadata.avatar_url} alt="avatar" /> : <User className="w-4 h-4" />}
                   </div>
                 ) : <LogIn className="w-4 h-4 sm:w-5 sm:h-5" />}
                 <span className="hidden xs:inline">{user ? (userProfile.fullName || t.profile) : t.login}</span>
               </button>
 
+              {/* TOOLTIP */}
               {userTier !== 'VIP' && (
-                <div className="absolute top-full right-0 mt-3 md:mt-0 md:top-1/2 md:-translate-y-1/2 md:right-auto md:left-full md:ml-4 w-44 md:w-52 bg-indigo-600 text-white text-[11px] sm:text-xs font-bold p-3 rounded-xl shadow-xl animate-bounce z-[200]
-                  before:content-[''] before:absolute before:-top-1.5 before:right-6 md:before:top-1/2 md:before:-translate-y-1/2 md:before:-left-1.5 md:before:right-auto before:w-3 before:h-3 before:bg-indigo-600 before:rotate-45">
+                <div className="absolute top-full right-0 mt-3 md:mt-0 md:top-1/2 md:-translate-y-1/2 md:right-auto md:left-full md:ml-4 w-44 md:w-52 
+                  bg-indigo-600/80 backdrop-blur-md text-white text-[11px] sm:text-xs font-bold p-3 rounded-xl shadow-xl z-[200]
+                  animate-pulse-slow
+                  before:content-[''] before:absolute before:-top-1.5 before:right-6 md:before:top-1/2 md:before:-translate-y-1/2 md:before:-left-1.5 md:before:right-auto before:w-3 before:h-3 before:bg-indigo-600/80 before:rotate-45">
                   {userTier === 'GUEST' ? t.nudgeGuest : t.nudgeBasic}
                 </div>
               )}
@@ -404,10 +429,6 @@ export default function HomePage() {
       <main className="flex-1 overflow-y-auto w-full max-w-4xl mx-auto p-4 sm:p-6 [&::-webkit-scrollbar]:hidden">
         {history.length === 0 && !loading && (
           <div className="min-h-full flex flex-col justify-center items-center text-center py-10 animate-in fade-in zoom-in duration-500">
-             <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-4 py-2 rounded-full text-[10px] font-black mb-6 border border-indigo-100 uppercase tracking-widest">
-               <Sparkles className="w-3.5 h-3.5"/> 
-               {userTier === 'VIP' ? `VIP ${t.aiEnabled}` : t.aiEnabled}
-             </div>
              <h2 className="text-4xl sm:text-6xl font-black mb-4 tracking-tighter text-slate-900 leading-tight">{t.title}</h2>
              <p className="text-slate-500 text-base sm:text-lg mb-10 max-w-lg font-medium leading-relaxed">{t.subtitle}</p>
              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl">
@@ -425,20 +446,61 @@ export default function HomePage() {
 
         <div className="space-y-6">
           {history.map((chat, i) => (
-            <div key={i} className={`flex flex-col ${chat.role === 'user' ? 'items-end' : 'items-start'}`}>
-              <div className={`max-w-[92%] sm:max-w-[85%] p-4 sm:p-5 rounded-2xl border ${
-                chat.role === 'user' ? 'bg-slate-900 text-white border-slate-800' : 'bg-white text-slate-800 border-slate-100 shadow-sm'
-              }`}>
-                <div className="text-sm sm:text-base prose prose-sm sm:prose-base max-w-none prose-slate">
-                  <ReactMarkdown>{chat.content}</ReactMarkdown>
+            <div key={i} className={`flex w-full gap-3 ${chat.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              
+              {/* AI ICON (Left side for AI responses) */}
+              {chat.role === 'ai' && (
+                <div className="shrink-0 mt-1">
+                  <div className="bg-indigo-600 p-1.5 rounded-lg shadow-sm">
+                    <Bot className="text-white w-4 h-4 sm:w-5 sm:h-5" />
+                  </div>
                 </div>
+              )}
+
+              <div className={`flex flex-col max-w-[85%] sm:max-w-[75%] ${chat.role === 'user' ? 'items-end' : 'items-start'}`}>
+                {/* AI TIER LABEL (Shown inside/above the AI dialog) */}
+                {chat.role === 'ai' && (
+                  <span className="text-[10px] font-black text-indigo-500 uppercase tracking-tighter mb-1 ml-1">
+                    {chat.tier === 'VIP' ? 'VIP AI' : chat.tier === 'BASIC' ? 'Basic AI' : 'Guest AI'}
+                  </span>
+                )}
+
+                <div className={`p-4 sm:p-5 rounded-2xl border ${
+                  chat.role === 'user' 
+                    ? 'bg-slate-900 text-white border-slate-800 rounded-tr-none' 
+                    : 'bg-white text-slate-800 border-slate-100 shadow-sm rounded-tl-none'
+                }`}>
+                  <div className="text-sm sm:text-base prose prose-sm sm:prose-base max-w-none prose-slate">
+                    <ReactMarkdown>{chat.content}</ReactMarkdown>
+                  </div>
+                </div>
+                
+                {/* REMOVED: "Tier: Basic" text that was below the message */}
               </div>
-              {chat.tier && <span className={`text-[10px] font-black mt-1 uppercase tracking-tighter px-2 ${chat.tier === 'VIP' ? 'text-indigo-500' : 'text-slate-400'}`}>Tier: {chat.tier}</span>}
+
+              {/* USER AVATAR (Right side for User messages) */}
+              {chat.role === 'user' && (
+                <div className="shrink-0 mt-1">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
+                    {user?.user_metadata?.avatar_url ? (
+                      <img src={user.user_metadata.avatar_url} alt="user" className="w-full h-full object-cover" />
+                    ) : (
+                      <User className="text-slate-500 w-5 h-5 sm:w-6 sm:h-6" />
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
+
           {loading && (
-            <div className="text-xs sm:text-sm text-slate-400 font-bold animate-pulse flex items-center gap-2 px-2">
-              <Bot className="w-4 h-4 sm:w-5 sm:h-5"/> {t.thinking}
+            <div className="flex gap-3 items-center px-2">
+              <div className="bg-slate-100 p-1.5 rounded-lg animate-pulse">
+                <Bot className="text-slate-400 w-4 h-4 sm:w-5 sm:h-5"/>
+              </div>
+              <div className="text-xs sm:text-sm text-slate-400 font-bold animate-pulse">
+                {t.thinking}
+              </div>
             </div>
           )}
           <div ref={messagesEndRef} className="h-4" />

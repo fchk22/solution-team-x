@@ -1,3 +1,21 @@
+/* 1. Standard Tailwind Directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 2. Custom Animation (Standard CSS approach) */
+@keyframes pulse-opacity {
+  0%, 100% { 
+    opacity: 1; 
+  }
+  50% { 
+    opacity: 0.5; /* Slightly more noticeable fade */
+  }
+}
+
+/* This allows you to keep using the className="animate-pulse-slow" in page.tsx */
+.animate-pulse-slow {
+  animation: pulse-opacity 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* --- Rest of your 1100+ lines follow here --- */
