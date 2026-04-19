@@ -20,8 +20,10 @@ const translations: any = {
     login: "Sign In",
     logout: "Sign Out",
     profile: "User Profile",
-    nudgeGuest: "Log in & complete profile to unlock faster AI responses!",
-    nudgeBasic: "Complete your profile to unlock faster AI responses!",
+    headerLabel: "Card Rebate",
+    aiEnabled: "AI Rebate Hunter",
+    nudgeGuest: "Log in & complete profile to unlock high-speed VIP AI!",
+    nudgeBasic: "Complete your profile to unlock high-speed VIP AI!",
     placeholder: "Ask about HSBC cards or eligibility...",
     thinking: "AI Engine Analyzing...",
     save: "SAVE & UNLOCK PAID AI",
@@ -34,7 +36,7 @@ const translations: any = {
     relationship: "Banking Relationship",
     disclaimer: "AI-generated advice may be inaccurate. Always verify with the bank's latest Key Fact Statement (KFS).",
     profileRemark: "Complete profile for high-speed VIP AI & personalized analysis.",
-    quickTips: ["Best card for iPhone?", "Fastest Asia Miles?", "Top card for China?", "Welcome Offers?"],
+    quickTips: ["Best card for iPhone?", "Fastest Asia Miles?", "Best card for spending in China?", "Welcome Offers?"],
     fullNameLabel: "Full Name (Optional)",
     fullNamePlaceholder: "e.g. Tommy Leung",
     incomeLabel: "Annual Income (HKD)",
@@ -80,8 +82,10 @@ const translations: any = {
     login: "登入",
     logout: "登出",
     profile: "個人檔案",
-    nudgeGuest: "登入並填寫資料，獲取更快的 AI 解答！",
-    nudgeBasic: "填寫資料，獲取更快的 AI 解答！",
+    headerLabel: "信用卡回贈",
+    aiEnabled: "AI 回贈獵人",
+    nudgeGuest: "立即登入並填寫資料，開啟 VIP 高速 AI 模式！",
+    nudgeBasic: "填寫資料，開啟 VIP 高速 AI 模式！",
     placeholder: "詢問關於滙豐信用卡或申請資格...",
     thinking: "AI 引擎正在分析...",
     save: "儲存並開啟 VIP AI",
@@ -94,7 +98,7 @@ const translations: any = {
     relationship: "銀行往來關係",
     disclaimer: "AI 提供的建議僅供參考，或有偏差。請務必參閱銀行最新的服務條款及細則。",
     profileRemark: "填寫資料以解鎖高性能 VIP AI 及個人化分析。",
-    quickTips: ["買 iPhone 用邊張卡？", "最快儲里數方法？", "內地消費最強卡？", "最新迎新優惠？"],
+    quickTips: ["買 iPhone 用邊張卡？", "最快儲里數方法？", "返內地消費用邊張卡？", "最新迎新優惠？"],
     fullNameLabel: "姓名 (選填)",
     fullNamePlaceholder: "例如：Tommy Leung",
     incomeLabel: "年收入 (HKD)",
@@ -135,30 +139,32 @@ const translations: any = {
     }
   },
   cn: {
-    title: "賺盡回贈。",
-    subtitle: "透過 AI 引擎制定最強信用卡策略。比較、優化、並在每一份消費賺取最高獎賞。",
-    login: "登錄",
+    title: "赚尽返现。",
+    subtitle: "通过 AI 引擎制定最强信用卡策略向。比较、优化、并在每一笔消费中赚取最高奖赏。",
+    login: "登录",
     logout: "登出",
-    profile: "個人檔案",
-    nudgeGuest: "登錄並填寫資料，獲取更快的 AI 解答！",
-    nudgeBasic: "填寫個人資料，獲取更快的 AI 解答！",
-    placeholder: "詢問關於滙豐信用卡或申請資格...",
+    profile: "个人资料",
+    headerLabel: "信用卡返现",
+    aiEnabled: "AI 返现猎人",
+    nudgeGuest: "立即登录并填写资料，开启 VIP 高速 AI 模式！",
+    nudgeBasic: "填写资料，开启 VIP 高速 AI 模式！",
+    placeholder: "询问关于汇丰信用卡或申请资格...",
     thinking: "AI 引擎正在分析...",
-    save: "保存並開啟 VIP AI",
-    saving: "正在儲存...",
-    requiredNote: "* 除姓名外，所有字段均為必填，以解鎖 VIP 權限。",
-    completeRequired: "請填寫所有必填字段",
-    sector: "職業 / 工作類別",
+    save: "保存并开启 VIP AI",
+    saving: "正在保存...",
+    requiredNote: "* 除姓名外，所有字段均为必填，以解锁 VIP 权限。",
+    completeRequired: "请填写所有必填字段",
+    sector: "职业 / 工作类别",
     residency: "居留身份",
-    goals: "消費目標 (可多選)",
-    relationship: "銀行往來關係",
-    disclaimer: "AI 提供的建議僅供參考，或有偏差。請務必參閱銀行最新的服務條款及細則。",
-    profileRemark: "填寫資料以解鎖高性能 VIP AI 及個人化分析。",
-    quickTips: ["買 iPhone 用哪張卡？", "最快攢里數方法？", "內地消費最強卡？", "最新迎新優惠？"],
-    fullNameLabel: "姓名 (選填)",
+    goals: "消费目标 (可多选)",
+    relationship: "银行往来关系",
+    disclaimer: "AI 提供的建议仅供参考，或有偏差。请务必参阅银行最新的服务条款及细则。",
+    profileRemark: "填写资料以解锁高性能 VIP AI 及个性化分析。",
+    quickTips: ["买 iPhone 用哪张卡？", "最快攒里程方法？", "内地消费最强卡？", "最新迎新优惠？"],
+    fullNameLabel: "姓名 (选填)",
     fullNamePlaceholder: "例如：Tommy Leung",
     incomeLabel: "年收入 (HKD)",
-    selectRange: "請選擇範圍",
+    selectRange: "请选择范围",
     incomes: {
       range1: "$200,000 以下",
       range2: "$200,000 - $400,000",
@@ -167,31 +173,31 @@ const translations: any = {
     },
     residencies: {
       permanent: "香港永久性居民",
-      nonResidentCN: "非本地居民 (內地)",
-      talent: "人才簽證 (IANG/高才通)",
-      student: "非本地學生"
+      nonResidentCN: "非本地居民 (内地)",
+      talent: "人才签证 (IANG/高才通)",
+      student: "非本地学生"
     },
     goalsList: {
-      Dining: "餐飲",
-      Travel: "旅遊",
-      Online: "網購",
-      Insurance: "保險",
+      Dining: "餐饮",
+      Travel: "旅游",
+      Online: "网购",
+      Insurance: "保险",
       Supermarket: "超市"
     },
     relationsList: {
-      'HSBC Payroll': "匯豐代發工資賬戶",
-      'HSBC Mortgage': "匯豐按揭",
-      'HSBC MPF': "匯豐強積金",
-      'Existing Cardholder': "現有信用卡客戶"
+      'HSBC Payroll': "汇丰代发工资账户",
+      'HSBC Mortgage': "汇丰按揭",
+      'HSBC MPF': "汇丰强积金",
+      'Existing Cardholder': "现有信用卡客户"
     },
     sectors: {
-      Gov: "政府人員 / 公務員",
-      Edu: "教育人員 / 教師",
-      Fin: "銀行及金融業",
-      Med: "醫療 / 專業人士",
-      NGO: "非營利機構 / 社工",
-      Self: "自雇 / 營商",
-      Others: "其他 / 私營機構"
+      Gov: "政府人员 / 公务员",
+      Edu: "教育人员 / 教师",
+      Fin: "银行及金融业",
+      Med: "医疗 / 专业人士",
+      NGO: "非营利机构 / 社工",
+      Self: "自雇 / 营商",
+      Others: "其他 / 私营机构"
     }
   }
 }
@@ -310,7 +316,6 @@ export default function HomePage() {
     setLoading(true)
     setQuestion('')
     try {
-      // Pass null profile if not VIP, triggering the free model backend side
       const profileData = userTier === 'VIP' ? userProfile : null;
       const result = await askCardExpert(text, profileData)
       setHistory(prev => [...prev, { role: 'ai', content: result.answer, tier: userTier as any }])
@@ -331,7 +336,7 @@ export default function HomePage() {
             </div>
             <div>
               <h1 className="text-sm sm:text-lg font-black tracking-tight leading-none">SolutionTeamX</h1>
-              <span className="text-[8px] sm:text-[9px] text-indigo-600 font-bold uppercase tracking-wider">Engine v2.0</span>
+              <span className="text-[8px] sm:text-[9px] text-indigo-600 font-bold uppercase tracking-wider">{t.headerLabel}</span>
             </div>
           </div>
           
@@ -365,7 +370,6 @@ export default function HomePage() {
                 <span className="hidden xs:inline">{user ? (userProfile.fullName || t.profile) : t.login}</span>
               </button>
 
-              {/* TIER LOGIC TOOLTIP (GUEST & BASIC) */}
               {userTier !== 'VIP' && (
                 <div className="absolute top-full right-0 mt-3 md:mt-0 md:top-1/2 md:-translate-y-1/2 md:right-auto md:left-full md:ml-4 w-44 md:w-52 bg-indigo-600 text-white text-[11px] sm:text-xs font-bold p-3 rounded-xl shadow-xl animate-bounce z-[200]
                   before:content-[''] before:absolute before:-top-1.5 before:right-6 md:before:top-1/2 md:before:-translate-y-1/2 md:before:-left-1.5 md:before:right-auto before:w-3 before:h-3 before:bg-indigo-600 before:rotate-45">
@@ -383,7 +387,7 @@ export default function HomePage() {
           <div className="min-h-full flex flex-col justify-center items-center text-center py-10 animate-in fade-in zoom-in duration-500">
              <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-4 py-2 rounded-full text-[10px] font-black mb-6 border border-indigo-100 uppercase tracking-widest">
                <Sparkles className="w-3.5 h-3.5"/> 
-               {userTier === 'VIP' ? "VIP Paid AI Enabled" : "Free AI Enabled"}
+               {userTier === 'VIP' ? `VIP ${t.aiEnabled}` : t.aiEnabled}
              </div>
              <h2 className="text-4xl sm:text-6xl font-black mb-4 tracking-tighter text-slate-900 leading-tight">{t.title}</h2>
              <p className="text-slate-500 text-base sm:text-lg mb-10 max-w-lg font-medium leading-relaxed">{t.subtitle}</p>
