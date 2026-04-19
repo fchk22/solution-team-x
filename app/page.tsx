@@ -24,7 +24,7 @@ const translations: any = {
     aiEnabled: "AI Rebate Hunter",
     nudgeGuest: "Log in & complete profile to unlock high-speed VIP AI!",
     nudgeBasic: "Complete your profile to unlock high-speed VIP AI!",
-    placeholder: "Ask about HSBC cards or eligibility...",
+    placeholder: "Ask about credit cards welcome offer or rebate...",
     thinking: "AI Engine Analyzing...",
     save: "SAVE & UNLOCK PAID AI",
     saving: "SAVING PROFILE...",
@@ -33,7 +33,6 @@ const translations: any = {
     sector: "Occupation / Job Category",
     residency: "Residency Status",
     goals: "Spending Goals (Select All)",
-    relationship: "Banking Relationship",
     disclaimer: "AI-generated advice may be inaccurate. Always verify with the bank's latest Key Fact Statement (KFS).",
     profileRemark: "Complete profile for high-speed VIP AI & personalized analysis.",
     quickTips: ["Best card for iPhone?", "Fastest Asia Miles?", "Best card for spending in China?", "Welcome Offers?"],
@@ -41,6 +40,17 @@ const translations: any = {
     fullNamePlaceholder: "e.g. Tommy Leung",
     incomeLabel: "Annual Income (HKD)",
     selectRange: "Select Range",
+    primaryBankLabel: "Primary HK Bank",
+    primaryBankPlaceholder: "Select your main bank",
+    bankProductsLabel: "Products with this bank (Select all)",
+    banks: ['HSBC', 'Standard Chartered', 'Hang Seng', 'BOC (HK)', 'Citibank', 'DBS', 'None / Others'],
+    productsList: {
+      Payroll: "Payroll Account",
+      Priority: "Priority / Premier Banking",
+      Mortgage: "Mortgage Loan",
+      Deposit: "Time Deposit / High Savings",
+      CreditCard: "Credit Card"
+    },
     incomes: {
       range1: "Below $200,000",
       range2: "$200,000 - $400,000",
@@ -59,12 +69,6 @@ const translations: any = {
       Online: "Online",
       Insurance: "Insurance",
       Supermarket: "Supermarket"
-    },
-    relationsList: {
-      'HSBC Payroll': "HSBC Payroll",
-      'HSBC Mortgage': "HSBC Mortgage",
-      'HSBC MPF': "HSBC MPF",
-      'Existing Cardholder': "Existing Cardholder"
     },
     sectors: {
       Gov: "Government / Civil Servant",
@@ -86,7 +90,7 @@ const translations: any = {
     aiEnabled: "AI 回贈獵人",
     nudgeGuest: "立即登入並填寫資料，開啟 VIP 高速 AI 模式！",
     nudgeBasic: "填寫資料，開啟 VIP 高速 AI 模式！",
-    placeholder: "詢問關於滙豐信用卡或申請資格...",
+    placeholder: "詢問關於信用卡迎新優惠或回贈...",
     thinking: "AI 引擎正在分析...",
     save: "儲存並開啟 VIP AI",
     saving: "正在儲存...",
@@ -95,7 +99,6 @@ const translations: any = {
     sector: "職業 / 工作類別",
     residency: "居留身份",
     goals: "消費目標 (可多選)",
-    relationship: "銀行往來關係",
     disclaimer: "AI 提供的建議僅供參考，或有偏差。請務必參閱銀行最新的服務條款及細則。",
     profileRemark: "填寫資料以解鎖高性能 VIP AI 及個人化分析。",
     quickTips: ["買 iPhone 用邊張卡？", "最快儲里數方法？", "返內地消費用邊張卡？", "最新迎新優惠？"],
@@ -103,6 +106,17 @@ const translations: any = {
     fullNamePlaceholder: "例如：Tommy Leung",
     incomeLabel: "年收入 (HKD)",
     selectRange: "請選擇範圍",
+    primaryBankLabel: "主要往來銀行",
+    primaryBankPlaceholder: "請選擇最常用的銀行",
+    bankProductsLabel: "您在該銀行的產品/服務 (可多選)",
+    banks: ['滙豐 HSBC', '渣打 Standard Chartered', '恒生 Hang Seng', '中銀香港 BOC', '花旗 Citibank', '星展 DBS', '沒有 / 其他'],
+    productsList: {
+      Payroll: "出糧戶口",
+      Priority: "卓越 / 優先理財",
+      Mortgage: "按揭貸款",
+      Deposit: "定期存款 / 大額活期",
+      CreditCard: "信用卡"
+    },
     incomes: {
       range1: "$200,000 以下",
       range2: "$200,000 - $400,000",
@@ -122,12 +136,6 @@ const translations: any = {
       Insurance: "保險",
       Supermarket: "超級市場"
     },
-    relationsList: {
-      'HSBC Payroll': "滙豐出糧戶口",
-      'HSBC Mortgage': "滙豐按揭",
-      'HSBC MPF': "滙豐強積金",
-      'Existing Cardholder': "現有信用卡客戶"
-    },
     sectors: {
       Gov: "政府人員 / 公務員",
       Edu: "教育界 / 教師",
@@ -140,7 +148,7 @@ const translations: any = {
   },
   cn: {
     title: "赚尽返现。",
-    subtitle: "通过 AI 引擎制定最强信用卡策略向。比较、优化、并在每一笔消费中赚取最高奖赏。",
+    subtitle: "通过 AI 引擎制定最强信用卡策略。比较、优化、并在每一笔消费中赚取最高奖赏。",
     login: "登录",
     logout: "登出",
     profile: "个人资料",
@@ -148,7 +156,7 @@ const translations: any = {
     aiEnabled: "AI 返现猎人",
     nudgeGuest: "立即登录并填写资料，开启 VIP 高速 AI 模式！",
     nudgeBasic: "填写资料，开启 VIP 高速 AI 模式！",
-    placeholder: "询问关于汇丰信用卡或申请资格...",
+    placeholder: "询问关于信用卡迎新礼遇或返现...",
     thinking: "AI 引擎正在分析...",
     save: "保存并开启 VIP AI",
     saving: "正在保存...",
@@ -157,7 +165,6 @@ const translations: any = {
     sector: "职业 / 工作类别",
     residency: "居留身份",
     goals: "消费目标 (可多选)",
-    relationship: "银行往来关系",
     disclaimer: "AI 提供的建议仅供参考，或有偏差。请务必参阅银行最新的服务条款及细则。",
     profileRemark: "填写资料以解锁高性能 VIP AI 及个性化分析。",
     quickTips: ["买 iPhone 用哪张卡？", "最快攒里程方法？", "内地消费最强卡？", "最新迎新优惠？"],
@@ -165,6 +172,17 @@ const translations: any = {
     fullNamePlaceholder: "例如：Tommy Leung",
     incomeLabel: "年收入 (HKD)",
     selectRange: "请选择范围",
+    primaryBankLabel: "主要往来银行",
+    primaryBankPlaceholder: "请选择最常用的银行",
+    bankProductsLabel: "您在该银行的产品/服务 (可多选)",
+    banks: ['汇丰 HSBC', '渣打 Standard Chartered', '恒生 Hang Seng', '中银香港 BOC', '花旗 Citibank', '星展 DBS', '没有 / 其他'],
+    productsList: {
+      Payroll: "代发工资账户",
+      Priority: "卓越 / 优先理财",
+      Mortgage: "按揭贷款",
+      Deposit: "定期存款 / 大额活期",
+      CreditCard: "信用卡"
+    },
     incomes: {
       range1: "$200,000 以下",
       range2: "$200,000 - $400,000",
@@ -183,12 +201,6 @@ const translations: any = {
       Online: "网购",
       Insurance: "保险",
       Supermarket: "超市"
-    },
-    relationsList: {
-      'HSBC Payroll': "汇丰代发工资账户",
-      'HSBC Mortgage': "汇丰按揭",
-      'HSBC MPF': "汇丰强积金",
-      'Existing Cardholder': "现有信用卡客户"
     },
     sectors: {
       Gov: "政府人员 / 公务员",
@@ -216,6 +228,8 @@ interface UserProfile {
   occupation: string;
   employment_type: string; 
   ownedCards: string[]; 
+  primaryBank: string;      // NEW
+  bankProducts: string[];   // NEW
   language: 'en' | 'zh' | 'cn';
 }
 
@@ -233,21 +247,22 @@ export default function HomePage() {
   const [userProfile, setUserProfile] = useState<UserProfile>({
     fullName: '', income: '', residencyStatus: '', 
     primarySpend: '', occupation: '', employment_type: 'Full-time', 
-    ownedCards: [], language: 'en'
+    ownedCards: [], primaryBank: '', bankProducts: [], language: 'en'
   })
   
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // Validation Logic
+  // Validation Logic - Includes the new bank/product requirements
   const isProfileComplete = Boolean(
     userProfile.income && 
     userProfile.occupation && 
     userProfile.residencyStatus && 
+    userProfile.primaryBank &&
     (userProfile.primarySpend && userProfile.primarySpend.length > 0) &&
-    (userProfile.ownedCards && userProfile.ownedCards.length > 0)
+    // If they have a bank, they should select at least one product OR "Credit Card"
+    (userProfile.primaryBank.includes('None') || userProfile.primaryBank.includes('沒有') || (userProfile.bankProducts && userProfile.bankProducts.length > 0))
   );
 
-  // User Tier Logic
   const userTier = !user ? 'GUEST' : isProfileComplete ? 'VIP' : 'BASIC';
 
   useEffect(() => {
@@ -268,6 +283,8 @@ export default function HomePage() {
             occupation: profile.occupation || '',
             employment_type: profile.employment_type || 'Full-time',
             ownedCards: profile.owned_cards || [],
+            primaryBank: profile.primary_bank || '',         // FROM SUPABASE
+            bankProducts: profile.bank_products || [],       // FROM SUPABASE
             language: (profile.preferred_language as any) || 'en',
             primarySpend: profile.primary_spend || ''
           })
@@ -300,7 +317,9 @@ export default function HomePage() {
         primary_spend: userProfile.primarySpend,
         occupation: userProfile.occupation,
         employment_type: userProfile.employment_type, 
-        owned_cards: userProfile.ownedCards,        
+        owned_cards: userProfile.ownedCards,
+        primary_bank: userProfile.primaryBank,     // SAVE NEW FIELD
+        bank_products: userProfile.bankProducts,   // SAVE NEW FIELD
         preferred_language: lang,
         updated_at: new Date().toISOString(),
       });
@@ -524,6 +543,53 @@ export default function HomePage() {
                 </select>
               </div>
 
+              {/* TWO-STEP BANKING RELATIONSHIP */}
+              <div className="space-y-1.5 pt-2 border-t">
+                <label className="text-[10px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-1">
+                  <Landmark className="w-3 h-3"/> {t.primaryBankLabel} *
+                </label>
+                <select 
+                  value={userProfile.primaryBank} 
+                  onChange={(e) => setUserProfile({...userProfile, primaryBank: e.target.value, bankProducts: []})} 
+                  className="w-full p-3.5 bg-slate-50 border rounded-xl text-sm font-bold outline-none cursor-pointer"
+                >
+                  <option value="">{t.primaryBankPlaceholder}</option>
+                  {t.banks.map((bank: string) => (
+                    <option key={bank} value={bank}>{bank}</option>
+                  ))}
+                </select>
+              </div>
+
+              {userProfile.primaryBank && !userProfile.primaryBank.includes('None') && !userProfile.primaryBank.includes('沒有') && (
+                <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
+                  <label className="text-[10px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-1">
+                    <Sparkles className="w-3 h-3"/> {t.bankProductsLabel} *
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {Object.entries(t.productsList).map(([key, label]) => {
+                      const isSelected = (userProfile.bankProducts || []).includes(key);
+                      return (
+                        <button 
+                          key={key} type="button" 
+                          onClick={() => {
+                            const current = userProfile.bankProducts || [];
+                            const next = isSelected ? current.filter(p => p !== key) : [...current, key];
+                            setUserProfile({...userProfile, bankProducts: next});
+                          }}
+                          className={`px-3 py-2 rounded-lg text-[11px] font-bold border transition-all flex items-center gap-1 ${
+                            isSelected 
+                            ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white border-slate-200 text-slate-500 hover:border-indigo-300'
+                          }`}
+                        >
+                          {isSelected && <CheckCircle2 className="w-3 h-3" />}
+                          {label as string}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-1">
                   <ShoppingBag className="w-3 h-3"/> {t.goals} *
@@ -544,31 +610,6 @@ export default function HomePage() {
                     >
                       {(userProfile.primarySpend || '').includes(goal) && <CheckCircle2 className="w-3.5 h-3.5" />}
                       {t.goalsList[goal]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-2 pb-4">
-                <label className="text-[10px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-1">
-                  <Landmark className="w-3 h-3"/> {t.relationship} *
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {['HSBC Payroll', 'HSBC Mortgage', 'HSBC MPF', 'Existing Cardholder'].map(rel => (
-                    <button 
-                      key={rel} type="button" 
-                      onClick={() => {
-                        const current = userProfile.ownedCards ?? [];
-                        const next = current.includes(rel) ? current.filter(c => c !== rel) : [...current, rel];
-                        setUserProfile({...userProfile, ownedCards: next});
-                      }} 
-                      className={`text-[10px] p-3 rounded-xl border font-black transition-all flex items-center justify-center gap-1.5 ${
-                        (userProfile.ownedCards ?? []).includes(rel) 
-                        ? 'bg-indigo-600 border-indigo-600 text-white shadow-md' : 'bg-white border-slate-100 text-slate-500'
-                      }`}
-                    >
-                      {(userProfile.ownedCards ?? []).includes(rel) && <CheckCircle2 className="w-3.5 h-3.5" />}
-                      {t.relationsList[rel]}
                     </button>
                   ))}
                 </div>
