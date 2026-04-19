@@ -44,27 +44,3 @@ export async function askCardExpert(userQuestion: string, isVIP: boolean = false
     return { success: false, error: error.message || "Failed to get expert advice." };
   }
 }
-
-export async function uploadAndAnalyzeAction(formData: FormData) {
-  try {
-    const file = formData.get("file") as File;
-    if (!file) throw new Error("No file uploaded");
-
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    // Call the analysis logic we defined in ai-analyst.ts
-    const analysisResult = await analyzePdfContent(buffer);
-
-    return { 
-      success: true, 
-      data: analysisResult 
-    };
-  } catch (error: any) {
-    console.error("Upload Error:", error.message);
-    return { 
-      success: false, 
-      error: error.message || "Failed to analyze document" 
-    };
-  }
-}
