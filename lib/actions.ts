@@ -2,41 +2,81 @@
 
 import { getCardExpertContext } from "@/lib/supabaseServer";
 import { getSmartCreditResponse } from "@/lib/ai-analyst";
-import { analyzePdfContent } from "@/lib/ai-analyst"; // Make sure this import matches your file name
+import { supabase } from "@/lib/auth"; 
 
-export async function askCardExpert(userQuestion: string, isVIP: boolean = false) {
+/**
+ * @param userQuestion - The question from the chat input
+ * @param isVIP - Boolean for model tiering
+ * @param preferredLang - The UI language from the frontend ('en', 'zh', 'cn')
+ */
+export async function askCardExpert(
+  userQuestion: string, 
+  isVIP: boolean = false, 
+  preferredLang: string = 'en'
+) {
   try {
     const lowerQ = userQuestion.toLowerCase();
-    let cardQuery = "Red";
-
-    // 1. Refined Routing Logic
-    if (lowerQ.includes("iphone") || lowerQ.includes("apple") || lowerQ.includes("mac")) {
-      cardQuery = "Premier";
-    } else if (lowerQ.includes("everymile") || lowerQ.includes("miles")) {
-      cardQuery = "EveryMile";
-    } else if (lowerQ.includes("signature")) {
-      cardQuery = "Signature";
-    }
-
-    // 2. Fetch context from Supabase (using your fixed Admin client)
-    const context = await getCardExpertContext(cardQuery);
-    if (!context || !context.card) {
-      return { success: false, error: `Could not find data for ${cardQuery} card.` };
-    }
-
-    // 3. Get AI Response (JSON string)
-    const rawAiJson = await getSmartCreditResponse(userQuestion, context, isVIP);
     
-    // 4. Parse JSON to ensure result.answer exists for page.tsx
+    // 1. GET USER SESSION & PROFILE
+    const { data: { session } } = await supabase.auth.getSession();
+    let userProfile = null;
+
+    if (session?.user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('income, residency_status, primary_spend, occupation, primary_bank, preferred_language')
+        .eq('id', session.user.id)
+        .maybeSingle();
+      userProfile = profile;
+    }
+
+    // 2. ROUTING / SEARCH LOGIC
+    let cardQuery = "Red"; 
+
+    if (lowerQ.includes("iphone") || lowerQ.includes("apple") || lowerQ.includes("mac") || lowerQ.includes("premier")) {
+      cardQuery = "Premier";
+    } else if (lowerQ.includes("everymile") || lowerQ.includes("miles") || lowerQ.includes("travel")) {
+      cardQuery = "EveryMile";
+    } else if (lowerQ.includes("signature") || lowerQ.includes("dining")) {
+      cardQuery = "Signature";
+    } else if (lowerQ.includes("gold")) {
+      cardQuery = "Gold";
+    }
+
+    // 3. FETCH DATA FROM SUPABASE
+    const context = await getCardExpertContext(cardQuery);
+    
+    if (!context || !context.card) {
+      return { success: false, error: `Could not find data for ${cardQuery} logic.` };
+    }
+
+    // 4. AUGMENT CONTEXT WITH USER DATA
+    const augmentedContext = {
+      ...context,
+      userProfile: userProfile 
+    };
+
+    // 5. GET AI RESPONSE (Passing the language and tier)
+    const rawAiJson = await getSmartCreditResponse(
+      userQuestion, 
+      augmentedContext, 
+      isVIP, 
+      preferredLang
+    );
+    
+    // 6. PARSE JSON FROM AI
     const parsed = JSON.parse(rawAiJson);
 
+    // 7. FINAL RETURN OBJECT
     return {
       success: true,
       answer: parsed.answer,
       reason: parsed.reason,
       alternative: parsed.alternative,
-      // This combines them for the UI to display easily
-      fullResponse: `${parsed.answer}\n\nREASON: ${parsed.reason}\n\nALT: ${parsed.alternative}`
+      suggestions: parsed.suggestions || [], 
+      applicationUrl: parsed.recommend_application ? context.card.application_url : null,
+      //applicationUrl: "https://www.google.com",
+      fullResponse: `${parsed.answer}\n\n**Reasoning:** ${parsed.reason}\n\n**Pro-Tip:** ${parsed.alternative}`
     };
 
   } catch (error: any) {
