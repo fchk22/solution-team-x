@@ -67,6 +67,21 @@ export async function askCardExpert(
     // 6. PARSE JSON FROM AI
     const parsed = JSON.parse(rawAiJson);
 
+    const card = context.card;
+    let displayName = { bank: '', card: '' };
+
+    // Select the correct localized strings
+    if (preferredLang === 'zh') {
+      displayName.bank = card.bank_name_zh || card.bank_name;
+      displayName.card = card.card_name_zh || card.card_name;
+    } else if (preferredLang === 'cn') {
+      displayName.bank = card.bank_name_cn || card.bank_name;
+      displayName.card = card.card_name_cn || card.card_name;
+    } else {
+      displayName.bank = card.bank_name || 'Bank';
+      displayName.card = card.card_name || 'Card';
+    }
+
     // 7. FINAL RETURN OBJECT
     return {
       success: true,
@@ -75,7 +90,10 @@ export async function askCardExpert(
       alternative: parsed.alternative,
       suggestions: parsed.suggestions || [], 
       applicationUrl: parsed.recommend_application ? context.card.application_url : null,
-      //applicationUrl: "https://www.google.com",
+      //bankName: context.card?.bank_name || '', // Add this
+      //cardName: context.card?.card_name || '',  // Add this
+      bankName: displayName.bank, // Sent as a single string to frontend
+      cardName: displayName.card, // Sent as a single string to frontend
       fullResponse: `${parsed.answer}\n\n**Reasoning:** ${parsed.reason}\n\n**Pro-Tip:** ${parsed.alternative}`
     };
 

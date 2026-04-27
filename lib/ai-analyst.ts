@@ -61,9 +61,9 @@ export async function getSmartCreditResponse(userQuery: string, context: any, is
 
           STRICT JSON OUTPUT FORMAT:
           { 
-            "answer": "[Answer] Direct answer text.\n\n[Reason] Brief core logic.", 
-            "reason": "[Breakdown]\n* Calculation steps...", 
-            "alternative": "[Warm Reminder] Disclaimer text...",
+            "answer": "Direct answer text.\n\n Brief core logic.", 
+            "reason": "\n* Calculation steps...", 
+            "alternative": "Disclaimer text...",
             "suggestions": ["Smart Follow-up Question 1?", "Smart Follow-up Question 2?"],
             "recommend_application": true
           }`

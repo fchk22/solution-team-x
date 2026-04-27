@@ -20,6 +20,8 @@ interface ChatMessage {
   showDetailButton?: boolean; // NEW
   suggestions?: string[];      // NEW
   applicationUrl?: string; // Add this line
+  bankName?: string; // Add this
+  cardName?: string; // Add this
 }
 
 interface UserProfile {
@@ -171,6 +173,8 @@ export default function HomePage() {
         tier: userTier as any,
         showDetailButton: true,              // Enable the "Want details" button
         suggestions: result.suggestions || [], // Map the dynamic suggestions from the AI
+        bankName: result.bankName, // Add this
+        cardName: result.cardName,  // Add this
         applicationUrl: result.applicationUrl
       }]);
 
@@ -334,21 +338,21 @@ export default function HomePage() {
                     rel="noopener noreferrer"
                     className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-rose-500 via-orange-500 to-amber-500 text-white rounded-2xl shadow-[0_10px_20px_rgba(244,63,94,0.3)] hover:shadow-[0_15px_30px_rgba(244,63,94,0.4)] hover:-translate-y-1 active:scale-95 transition-all duration-300"
                   >
-                    {/* Sparkle Icon */}
                     <div className="bg-white/20 p-1.5 rounded-lg">
                       <Zap className="w-4 h-4 fill-white" />
                     </div>
                     
                     <div className="flex flex-col items-start">
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80">Limited Time Offer</span>
+                      {/* REMOVED "Limited Time Offer" */}
                       <span className="text-sm sm:text-base font-black">
-                        {lang === 'en' ? 'Apply Now & Claim Rewards' : '立即申請並領取獎賞'}
+                        {lang === 'en' && `Apply ${chat.bankName} ${chat.cardName} now`}
+                        {lang === 'zh' && `立即申請${chat.bankName}${chat.cardName}`}
+                        {lang === 'cn' && `立即申请${chat.bankName}${chat.cardName}`}
                       </span>
                     </div>
 
                     <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     
-                    {/* Subtle Glow Effect */}
                     <div className="absolute inset-0 rounded-2xl bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
                   </a>
                   
