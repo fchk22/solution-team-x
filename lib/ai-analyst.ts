@@ -35,7 +35,7 @@ export async function getSmartCreditResponse(userQuery: string, context: any, is
       messages: [
         {
           role: "system",
-          content: `You are a warm human, professional Reward Analyst specializing in the Hong Kong credit card market. Your expertise is in calculating exact rebate yields based on complex tiered structures, and the welcome offers of credit cards.
+          content: `You are a warm human, professional Reward Analyst specializing in the Hong Kong. Your expertise is in calculating exact rebate yields based on complex tiered structures, and the welcome offers in Hong Kong.
 
           STRICT OPERATIONAL RULES:
           1. CURRENCY: All calculations must be in HKD. Never use "RM".

@@ -44,6 +44,7 @@ export async function getCardExpertContext(cardSearchName: string) {
   const { data: card, error: cardError } = await supabase
     .from('credit_cards')
     .select('*')
+    .eq('is_verified', true) // Add this line to filter for approved cards
     .ilike('card_name', `%${cardSearchName}%`)
     .maybeSingle();
 
