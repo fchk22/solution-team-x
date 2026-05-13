@@ -15,9 +15,7 @@ export async function askCardExpert(
   preferredLang: string = 'en'
 ) {
   try {
-    const lowerQ = userQuestion.toLowerCase();
-    
-    // 1. GET USER SESSION & PROFILE
+    // 1. GET USER PROFILE
     const { data: { session } } = await supabase.auth.getSession();
     let userProfile = null;
 
@@ -30,33 +28,18 @@ export async function askCardExpert(
       userProfile = profile;
     }
 
-    // 2. ROUTING / SEARCH LOGIC
-    let cardQuery = "Red"; 
-
-    if (lowerQ.includes("iphone") || lowerQ.includes("apple") || lowerQ.includes("mac") || lowerQ.includes("premier")) {
-      cardQuery = "Premier";
-    } else if (lowerQ.includes("everymile") || lowerQ.includes("miles") || lowerQ.includes("travel")) {
-      cardQuery = "EveryMile";
-    } else if (lowerQ.includes("signature") || lowerQ.includes("dining")) {
-      cardQuery = "Signature";
-    } else if (lowerQ.includes("gold")) {
-      cardQuery = "Gold";
-    }
-
-    // 3. FETCH DATA FROM SUPABASE
-    const context = await getCardExpertContext(cardQuery);
+    // 2. DYNAMIC DATABASE SEARCH
+    const context = await getCardExpertContext(userQuestion || "");
     
-    if (!context || !context.card) {
-      return { success: false, error: `Could not find data for ${cardQuery} logic.` };
+    if (!context || !context.cards || context.cards.length === 0) {
+      return { 
+        success: false, 
+        error: "I couldn't find any specific credit cards in our database matching your request." 
+      };
     }
 
-    // 4. AUGMENT CONTEXT WITH USER DATA
-    const augmentedContext = {
-      ...context,
-      userProfile: userProfile 
-    };
-
-    // 5. GET AI RESPONSE (Passing the language and tier)
+    // 3. GET AI RESPONSE
+    const augmentedContext = { ...context, userProfile };
     const rawAiJson = await getSmartCreditResponse(
       userQuestion, 
       augmentedContext, 
@@ -64,41 +47,80 @@ export async function askCardExpert(
       preferredLang
     );
     
-    // 6. PARSE JSON FROM AI
-    const parsed = JSON.parse(rawAiJson);
+    // 4. PARSE AI RESPONSE
+    const parsed = JSON.parse(rawAiJson || "{}");
+    const aiAnswer = (parsed.answer || "").toLowerCase();
+    const aiChoice = (parsed.card_name_recommendation || "").toLowerCase();
+    const dbCards = context.cards;
 
-    const card = context.card;
-    let displayName = { bank: '', card: '' };
+    // 5. STRATEGIC CARD MATCHING (The Fix for BEA Goal vs UnionPay)
+    let primaryCard;
 
-    // Select the correct localized strings
-    if (preferredLang === 'zh') {
-      displayName.bank = card.bank_name_zh || card.bank_name;
-      displayName.card = card.card_name_zh || card.card_name;
-    } else if (preferredLang === 'cn') {
-      displayName.bank = card.bank_name_cn || card.bank_name;
-      displayName.card = card.card_name_cn || card.card_name;
-    } else {
-      displayName.bank = card.bank_name || 'Bank';
-      displayName.card = card.card_name || 'Card';
+    // Strategy A: Unique Product Keywords
+    // We check for these first so "BEA Goal" beats a generic "BEA" match.
+    const uniqueProductKeywords = ["goal", "everymile", "red", "motion", "chill", "pulse", "premier", "signature"];
+    
+    for (const keyword of uniqueProductKeywords) {
+      if (aiAnswer.includes(keyword) || aiChoice.includes(keyword)) {
+        primaryCard = dbCards.find(c => c.card_name.toLowerCase().includes(keyword));
+        if (primaryCard) break; 
+      }
     }
 
-    // 7. FINAL RETURN OBJECT
+    // Strategy B: Full Name Match
+    if (!primaryCard) {
+      primaryCard = dbCards
+        .sort((a, b) => b.card_name.length - a.card_name.length)
+        .find(card => {
+          const name = card.card_name.toLowerCase();
+          return aiAnswer.includes(name) || aiChoice.includes(name);
+        });
+    }
+
+    // Strategy C: Bank-Level Fallback (e.g., any BEA card if "BEA" is mentioned)
+    if (!primaryCard && aiAnswer.includes("bea")) {
+      primaryCard = dbCards.find(c => 
+        (c.bank_name || "").toLowerCase().includes("bea") || 
+        c.card_name.toLowerCase().includes("bea")
+      );
+    }
+
+    // FINAL FALLBACK: Default to the first card in the search results
+    const finalCard = primaryCard || dbCards[0];
+    
+    // Debugging: Log this in your terminal to verify the match
+    console.log(`✅ AI Recommended Link: ${finalCard.card_name}`);
+
+    // 6. BUTTON VISIBILITY LOGIC
+    // Force button to show if the AI explicitly recommends or mentions application
+    const showButton = parsed.recommend_application || 
+                       aiAnswer.includes("recommend") || 
+                       aiAnswer.includes("apply") ||
+                       aiAnswer.includes("best option");
+
+    // 7. LOCALIZATION
+    let displayName = { bank: finalCard.bank_name || 'Bank', card: finalCard.card_name || 'Card' };
+    if (preferredLang !== 'en') {
+      const suffix = preferredLang === 'zh' ? '_zh' : '_cn';
+      displayName.bank = finalCard[`bank_name${suffix}`] || finalCard.bank_name;
+      displayName.card = finalCard[`card_name${suffix}`] || finalCard.card_name;
+    }
+
+    // 8. FINAL RETURN
     return {
       success: true,
-      answer: parsed.answer,
-      reason: parsed.reason,
-      alternative: parsed.alternative,
+      answer: parsed.answer || "Analyzed.",
+      reason: parsed.reason || "",
+      alternative: parsed.alternative || "",
       suggestions: parsed.suggestions || [], 
-      applicationUrl: parsed.recommend_application ? context.card.application_url : null,
-      //bankName: context.card?.bank_name || '', // Add this
-      //cardName: context.card?.card_name || '',  // Add this
-      bankName: displayName.bank, // Sent as a single string to frontend
-      cardName: displayName.card, // Sent as a single string to frontend
-      fullResponse: `${parsed.answer}\n\n**Reasoning:** ${parsed.reason}\n\n**Pro-Tip:** ${parsed.alternative}`
+      applicationUrl: (showButton && finalCard.application_url) ? finalCard.application_url : null,
+      bankName: displayName.bank,
+      cardName: displayName.card,
+      fullResponse: `${parsed.answer}\n\n**Reasoning:** ${parsed.reason}`
     };
 
   } catch (error: any) {
     console.error("Action Error:", error.message);
-    return { success: false, error: error.message || "Failed to get expert advice." };
+    return { success: false, error: "The AI analyst encountered an error." };
   }
 }

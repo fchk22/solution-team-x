@@ -1,14 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-/**
- * Creates a Supabase client for use in Server Components and Server Actions.
- * @param useAdmin If true, uses the Service Role Key to bypass RLS policies.
- */
 export async function createClient(useAdmin = false) {
   const cookieStore = await cookies();
-
-  // Use Service Role Key for administrative/expert tasks, otherwise use the Public Anon Key
   const supabaseKey = useAdmin
     ? process.env.SUPABASE_SERVICE_ROLE_KEY!
     : process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -18,68 +12,55 @@ export async function createClient(useAdmin = false) {
     supabaseKey,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-        set(name: string, value: string, options: any) {
-          cookieStore.set({ name, value, ...options });
-        },
-        remove(name: string, options: any) {
-          cookieStore.set({ name, value: "", ...options });
-        },
+        get(name: string) { return cookieStore.get(name)?.value; },
+        set(name: string, value: string, options: any) { cookieStore.set({ name, value, ...options }); },
+        remove(name: string, options: any) { cookieStore.set({ name, value: "", ...options }); },
       },
     }
   );
 }
 
-/**
- * Enhanced fetcher to get Card Info + Global HSBC Rules.
- * This function bypasses RLS to ensure the AI always has the latest data.
- */
-export async function getCardExpertContext(cardSearchName: string) {
-  // Use admin mode (true) to ensure we see the data even if RLS is on
+export async function getCardExpertContext(searchQuery: string) {
   const supabase = await createClient(true);
 
-  // 1. Fetch the specific card using a fuzzy search (ilike with % wildcards)
-  const { data: card, error: cardError } = await supabase
+  // 1. CLEAN KEYWORD
+  const clean = (searchQuery || "").replace(/[?(){}[\]\\]/g, "").toLowerCase().trim();
+  const words = clean.split(' ').filter(w => w.length > 2);
+  const target = words.length > 0 ? words[words.length - 1] : "credit";
+
+  // 2. USE A SIMPLER FILTER ARRAY
+  // We avoid the complex nested .or() string which is causing the logic tree error.
+  // Instead, we search for cards where the keyword appears in the name.
+  const { data: cards, error: cardError } = await supabase
     .from('credit_cards')
     .select('*')
-    .eq('is_verified', true) // Add this line to filter for approved cards
-    .ilike('card_name', `%${cardSearchName}%`)
-    .maybeSingle();
+    .eq('is_verified', true)
+    .ilike('card_name', `%${target}%`) // Single column ilike is very robust
+    .limit(10);
 
-  if (cardError) {
-    console.error('❌ Supabase Query Error:', cardError.message);
-    return null;
-  }
-
-  // 2. Diagnostic Check: If no card found, log what's actually in the DB
-  if (!card) {
-    console.warn(`⚠️ No card found matching "${cardSearchName}".`);
+  // 3. SECONDARY SEARCH (If name match fails, search the promo text)
+  if (!cards || cards.length === 0) {
+    const { data: promoCards } = await supabase
+      .from('credit_cards')
+      .select('*')
+      .eq('is_verified', true)
+      .filter('special_promos', 'cs', `{"tags": ["${target}"]}`) // Using containment for JSONB
+      .limit(5);
     
-    // This helper log helps you see if there's a typo in the table or column
-    const { data: existingCards } = await supabase.from('credit_cards').select('card_name').limit(5);
-    if (existingCards) {
-      console.log("Current cards in your DB are:", existingCards.map(c => c.card_name));
-    }
-    return null; 
+    if (promoCards && promoCards.length > 0) return { cards: promoCards };
   }
 
-  // 3. Fetch Global Rules (RYC categories, Expiry rules, etc.)
-  // We use the contains filter to pull HSBC-specific logic stored in JSONB
-  const { data: globalRules, error: rulesError } = await supabase
-    .from('global_credit_card_rules')
-    .select('*')
-    .contains('logic_json', { metadata: { bank: 'HSBC' } });
-
-  if (rulesError) {
-    console.error('⚠️ Global Rules Fetch Error:', rulesError.message);
+  // 4. ABSOLUTE FALLBACK
+  if (cardError || !cards || cards.length === 0) {
+    const { data: fallback } = await supabase
+      .from('credit_cards')
+      .select('*')
+      .eq('is_verified', true)
+      .order('last_scraped_at', { ascending: false })
+      .limit(8);
+      
+    return { cards: fallback || [] };
   }
 
-  // 4. Return the consolidated "Expert Context"
-  return {
-    card,
-    globalRules: globalRules || [],
-    timestamp: new Date().toISOString()
-  };
+  return { cards: cards || [] };
 }
