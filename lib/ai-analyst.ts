@@ -11,10 +11,6 @@ const router = new OpenAI({
 
 /**
  * AI Analyst for Credit Card Rewards
- * @param userQuery - The question from the user
- * @param context - Should now contain { cards: Card[], globalRules: any, userProfile: any }
- * @param isVIP - Boolean to determine which model to use
- * @param preferredLang - 'en' | 'zh' | 'cn'
  */
 export async function getSmartCreditResponse(
   userQuery: string, 
@@ -34,10 +30,22 @@ export async function getSmartCreditResponse(
 
   const responseLanguage = langMap[preferredLang] || "English";
 
-  console.log(`🤖 AI Processing | Tier: ${isVIP ? 'VIP' : 'Basic'} | Model: ${targetModel}`);
+  // Destructure context - summary comes from your refined supabaseServer.ts
+  const { cards, globalRules, userProfile, summary } = context;
 
-  // Destructure cards (plural) to ensure the AI sees the whole market
-  const { cards, globalRules, userProfile } = context;
+  // 1. DATA PREPARATION (The Fix for Missing Income/Bank Info)
+  // We explicitly map the annual_income_requirement column so the AI sees it.
+  const formattedCards = (cards || []).map((c: any, i: number) => (
+    `[CARD ${i + 1}]
+     Bank: ${c.bank_name}
+     Name: ${c.card_name}
+     Annual Income Requirement: ${c.annual_income_requirement || 'Not specified/Varies'}
+     Welcome Offer: ${c.welcome_offer || 'N/A'}
+     Special Promos: ${JSON.stringify(c.special_promos || {})}
+     URL: ${c.application_url || 'N/A'}`
+  )).join('\n\n');
+
+  console.log(`🤖 AI Processing | Tier: ${isVIP ? 'VIP' : 'Basic'} | Model: ${targetModel}`);
 
   try {
     const response = await router.chat.completions.create({
@@ -46,33 +54,38 @@ export async function getSmartCreditResponse(
       messages: [
         {
           role: "system",
-          content: `You are a warm human, professional Reward Analyst specializing in the Hong Kong market. 
-          Your expertise is in calculating exact rebate yields and analyzing welcome offers for ALL major HK banks (HSBC, Standard Chartered, Hang Seng, Citi, etc.).
-
+          content: `You are a human-like, professional Credit Card Reward Analyst in Hong Kong.
+          
+          CRITICAL CONTEXT:
+          ${summary || "Multiple banks are currently available in the database."}
+          
           STRICT OPERATIONAL RULES:
-          1. CURRENCY: All calculations must be in HKD.
-          2. STEP-BY-STEP CALCULATION: Show math for rewards clearly.
-          3. NO IMAGINATION: Use ONLY the provided DATABASE CONTEXT. If the user asks about a bank in the context (like Standard Chartered), answer using that data.
-          4. LANGUAGE: Always respond entirely in ${responseLanguage}.
-          5. NO ROBOTIC TALK: Do not use phrases like "Based on the database" or "In the JSON". Speak like a human expert.
+          1. DATA ADHERENCE: Use the provided DATASET. If a bank (HSBC, Standard Chartered, BEA, etc.) is in the dataset, you MUST acknowledge its data. Never claim a card is missing if it appears in the list below.
+          2. ELIGIBILITY: Always reference the "Annual Income Requirement" when advising if a user qualifies.
+          3. CALCULATION: Use HKD. Show clear math for rebates (e.g., 4% of $10,000 = $400).
+          4. TONE: Speak like a helpful, grounded peer. Avoid technical jargon like "JSON" or "Database".
+          5. LANGUAGE: Respond entirely in ${responseLanguage}.
+          6. MATCHING: If recommending a card, set "recommend_application" to true and "card_name_recommendation" to the exact card name.
 
-          DYNAMIC SUGGESTIONS ENGINE:
-          - Generate 2 "Smart Follow-up" questions that help the user maximize their rewards or compare specific cards.
-
-          STRICT JSON OUTPUT FORMAT:
+          JSON OUTPUT FORMAT:
           { 
-            "answer": "Direct, conversational answer text.", 
-            "reason": "Clear calculation or logic steps.", 
-            "alternative": "Comparison or disclaimer info.",
-            "suggestions": ["Question 1?", "Question 2?"],
+            "answer": "Direct, helpful answer.", 
+            "reason": "Calculation or eligibility logic.", 
+            "alternative": "Comparison or minor disclaimer.",
+            "suggestions": ["Follow-up 1?", "Follow-up 2?"],
+            "card_name_recommendation": "Exact Card Name",
             "recommend_application": true
           }`
         },
         {
           role: "user",
-          content: `DATABASE CONTEXT (Available Cards): ${JSON.stringify(cards || [])}
-          GLOBAL RULES: ${JSON.stringify(globalRules || {})}
+          content: `
           USER PROFILE: ${JSON.stringify(userProfile || {})}
+          GLOBAL RULES: ${JSON.stringify(globalRules || {})}
+          
+          DATASET (Available Cards):
+          ${formattedCards}
+
           USER QUESTION: "${userQuery}"`
         }
       ],

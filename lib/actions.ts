@@ -23,7 +23,7 @@ export async function askCardExpert(
       const { data: profile } = await supabase
         .from('profiles')
         .select('income, residency_status, primary_spend, occupation, primary_bank, preferred_language')
-        .eq('id', session.user.id)
+        .eq('id', session.user.id) // Fixed: Added 'id' as the first argument
         .maybeSingle();
       userProfile = profile;
     }
@@ -53,52 +53,52 @@ export async function askCardExpert(
     const aiChoice = (parsed.card_name_recommendation || "").toLowerCase();
     const dbCards = context.cards;
 
-    // 5. STRATEGIC CARD MATCHING (The Fix for BEA Goal vs UnionPay)
+    // 5. THE "ACCURATE MATCHER" (Fixes EveryMile vs Red issue)
     let primaryCard;
 
-    // Strategy A: Unique Product Keywords
-    // We check for these first so "BEA Goal" beats a generic "BEA" match.
-    const uniqueProductKeywords = ["goal", "everymile", "red", "motion", "chill", "pulse", "premier", "signature"];
-    
-    for (const keyword of uniqueProductKeywords) {
-      if (aiAnswer.includes(keyword) || aiChoice.includes(keyword)) {
-        primaryCard = dbCards.find(c => c.card_name.toLowerCase().includes(keyword));
-        if (primaryCard) break; 
-      }
-    }
-
-    // Strategy B: Full Name Match
-    if (!primaryCard) {
-      primaryCard = dbCards
-        .sort((a, b) => b.card_name.length - a.card_name.length)
-        .find(card => {
-          const name = card.card_name.toLowerCase();
-          return aiAnswer.includes(name) || aiChoice.includes(name);
-        });
-    }
-
-    // Strategy C: Bank-Level Fallback (e.g., any BEA card if "BEA" is mentioned)
-    if (!primaryCard && aiAnswer.includes("bea")) {
+    // Strategy A: Direct JSON Recommendation
+    // Priority: If the AI explicitly identified a recommendation in the JSON field
+    if (aiChoice) {
       primaryCard = dbCards.find(c => 
-        (c.bank_name || "").toLowerCase().includes("bea") || 
-        c.card_name.toLowerCase().includes("bea")
+        c.card_name.toLowerCase().includes(aiChoice) || 
+        aiChoice.includes(c.card_name.toLowerCase())
       );
     }
 
-    // FINAL FALLBACK: Default to the first card in the search results
+    // Strategy B: Longest Name Scan in AI Text
+    // This scans the AI's actual answer text. 
+    // We sort by length descending so "HSBC Red Credit Card" matches before "HSBC"
+    if (!primaryCard) {
+      const sortedByLength = [...dbCards].sort((a, b) => b.card_name.length - a.card_name.length);
+      primaryCard = sortedByLength.find(card => 
+        aiAnswer.includes(card.card_name.toLowerCase())
+      );
+    }
+
+    // Strategy C: Common Keyword Fallback
+    if (!primaryCard) {
+      const uniqueKeywords = ["red", "goal", "smart", "everymile", "simply cash", "cathay", "chill"];
+      for (const kw of uniqueKeywords) {
+        if (aiAnswer.includes(kw)) {
+          primaryCard = dbCards.find(c => c.card_name.toLowerCase().includes(kw));
+          if (primaryCard) break;
+        }
+      }
+    }
+
+    // 6. FINAL ASSIGNMENT
+    // Only default to context[0] if no mention was found in AI output
     const finalCard = primaryCard || dbCards[0];
     
-    // Debugging: Log this in your terminal to verify the match
-    console.log(`✅ AI Recommended Link: ${finalCard.card_name}`);
+    console.log(`🎯 Link Resolver: Match found [${finalCard.card_name}] via ${primaryCard ? 'AI content' : 'Default Fallback'}`);
 
-    // 6. BUTTON VISIBILITY LOGIC
-    // Force button to show if the AI explicitly recommends or mentions application
-    const showButton = parsed.recommend_application || 
+    // 7. BUTTON VISIBILITY LOGIC
+    const showButton = parsed.recommend_application === true || 
                        aiAnswer.includes("recommend") || 
-                       aiAnswer.includes("apply") ||
-                       aiAnswer.includes("best option");
+                       aiAnswer.includes("apply now") ||
+                       aiAnswer.includes("best choice");
 
-    // 7. LOCALIZATION
+    // 8. LOCALIZATION
     let displayName = { bank: finalCard.bank_name || 'Bank', card: finalCard.card_name || 'Card' };
     if (preferredLang !== 'en') {
       const suffix = preferredLang === 'zh' ? '_zh' : '_cn';
@@ -106,7 +106,7 @@ export async function askCardExpert(
       displayName.card = finalCard[`card_name${suffix}`] || finalCard.card_name;
     }
 
-    // 8. FINAL RETURN
+    // 9. FINAL RETURN
     return {
       success: true,
       answer: parsed.answer || "Analyzed.",

@@ -345,9 +345,9 @@ export default function HomePage() {
                     <div className="flex flex-col items-start">
                       {/* REMOVED "Limited Time Offer" */}
                       <span className="text-sm sm:text-base font-black">
-                        {lang === 'en' && `Apply ${chat.bankName} ${chat.cardName} now`}
-                        {lang === 'zh' && `立即申請${chat.bankName}${chat.cardName}`}
-                        {lang === 'cn' && `立即申请${chat.bankName}${chat.cardName}`}
+                        {lang === 'en' && `Apply ${chat.cardName} now`}
+                        {lang === 'zh' && `立即申請${chat.cardName}`}
+                        {lang === 'cn' && `立即申请${chat.cardName}`}
                       </span>
                     </div>
 
