@@ -24,7 +24,14 @@ export const translations: Record<Language, any> = {
     goals: "Spending Goals (Select All)",
     disclaimer: "AI-generated advice may be inaccurate. Always verify with the bank's latest Key Fact Statement (KFS).",
     profileRemark: "Complete profile for high-speed VIP AI & personalized analysis.",
-    quickTips: ["Best card for iPhone?", "Fastest Asia Miles?", "Best card for spending in China?", "Welcome Offers?"],
+    quickTips: [
+      "Compare Credit Card Welcome Offers",
+      "Compare Air Miles Credit Cards",
+      "Best Credit Cards for Online Shopping",
+      "Best Credit Cards for Overseas Spending",
+      "Best Credit Cards for Dining",
+      "Best Credit Card Promos for Buying iPhone"
+    ],
     fullNameLabel: "Full Name (Optional)",
     fullNamePlaceholder: "e.g. Tommy Leung",
     incomeLabel: "Annual Income (HKD)",
@@ -91,7 +98,14 @@ export const translations: Record<Language, any> = {
     goals: "消費目標 (可多選)",
     disclaimer: "AI 提供的建議僅供參考，或有偏差。請務必參閱銀行最新的服務條款及細則。",
     profileRemark: "填寫資料以解鎖高性能 VIP AI 及個人化分析。",
-    quickTips: ["買 iPhone 用邊張卡？", "最快儲里數方法？", "返內地消費用邊張卡？", "最新迎新優惠？"],
+    quickTips: [
+      "信用卡迎新優惠比較",
+      "飛行里數信用卡比較",
+      "網上購物信用卡比較",
+      "海外簽賬信用卡比較",
+      "食飯信用卡比較",
+      "買iPhone信用卡優惠比較"
+    ],
     fullNameLabel: "姓名 (選填)",
     fullNamePlaceholder: "例如：Tommy Leung",
     incomeLabel: "年收入 (HKD)",
@@ -158,7 +172,14 @@ export const translations: Record<Language, any> = {
     goals: "消费目标 (可多选)",
     disclaimer: "AI 提供的建议仅供参考，或有偏差。请务必参阅银行最新的服务条款及细则。",
     profileRemark: "填写资料以解锁高性能 VIP AI 及个性化分析。",
-    quickTips: ["买 iPhone 用哪张卡？", "最快攒里程方法？", "内地消费最强卡？", "最新迎新优惠？"],
+    quickTips: [
+      "信用卡迎新优惠比较",
+      "飞行里程信用卡比较",
+      "网上购物信用卡比较",
+      "海外签账信用卡比较",
+      "吃饭信用卡比较",
+      "买iPhone信用卡优惠比较"
+    ],
     fullNameLabel: "姓名 (选填)",
     fullNamePlaceholder: "例如：Tommy Leung",
     incomeLabel: "年收入 (HKD)",

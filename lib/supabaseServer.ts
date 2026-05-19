@@ -26,6 +26,14 @@ export async function getCardExpertContext(searchQuery: string) {
   // 1. COMPREHENSIVE BANK & KEYWORD DETECTION
   const clean = (searchQuery || "").replace(/[?(){}[\]\\]/g, "").toLowerCase().trim();
   
+  // Detect cross-lingual welcome offer matching sequences
+  const isWelcomeOfferQuery = 
+    clean.includes("welcome offer") || 
+    clean.includes("迎新獎賞") || 
+    clean.includes("迎新奖赏") ||
+    clean.includes("迎新優惠") ||
+    clean.includes("迎新优惠");
+
   const bankMap = [
     { id: 'hsbc', terms: ['hsbc', 'hongkong bank', '滙豐', '匯豐'] },
     { id: 'scb', terms: ['standard', 'chartered', 'scb', '渣打', 'smart card', 'cathay'] },
@@ -47,46 +55,74 @@ export async function getCardExpertContext(searchQuery: string) {
   let query = supabase.from('credit_cards').select('*').eq('is_verified', true);
   const orConditions: string[] = [];
 
-  // Add specific bank filters
-  if (detectedBankIds.length > 0) {
-    detectedBankIds.forEach(id => {
-      if (id === 'scb') orConditions.push(`bank_name.ilike.%standard%,bank_name.ilike.%scb%`);
-      else if (id === 'boc') orConditions.push(`bank_name.ilike.%boc%,bank_name.ilike.%bank of china%`);
-      else if (id === 'citi') orConditions.push(`bank_name.ilike.%citi%`);
-      else orConditions.push(`bank_name.ilike.%${id}%`);
-    });
+  if (isWelcomeOfferQuery) {
+    // Look for rows where welcome offers are populated (Not null and not an empty string)
+    query = query
+      .not('welcome_offer_details', 'is', null)
+      .neq('welcome_offer_details', '');
+  } else {
+    // Normal track: Apply target individual bank filters
+    if (detectedBankIds.length > 0) {
+      detectedBankIds.forEach(id => {
+        if (id === 'scb') orConditions.push(`bank_name.ilike.%standard%,bank_name.ilike.%scb%`);
+        else if (id === 'boc') orConditions.push(`bank_name.ilike.%boc%,bank_name.ilike.%bank of china%`);
+        else if (id === 'citi') orConditions.push(`bank_name.ilike.%citi%`);
+        else orConditions.push(`bank_name.ilike.%${id}%`);
+      });
+    }
+
+    // Add product name keyword search (e.g., "macbook", "red", "miles")
+    const words = clean.split(/\s+/).filter(w => w.length > 3 && !['compare', 'with', 'card'].includes(w));
+    if (words.length > 0) {
+      const lastWord = words[words.length - 1];
+      orConditions.push(`card_name.ilike.%${lastWord}%`);
+    }
+
+    if (orConditions.length > 0) {
+      query = query.or(orConditions.join(','));
+    }
   }
 
-  // Add product name keyword search (e.g., "macbook", "red", "miles")
-  const words = clean.split(/\s+/).filter(w => w.length > 3 && !['compare', 'with', 'card'].includes(w));
-  if (words.length > 0) {
-    const lastWord = words[words.length - 1];
-    orConditions.push(`card_name.ilike.%${lastWord}%`);
-  }
-
-  if (orConditions.length > 0) {
-    query = query.or(orConditions.join(','));
-  }
-
-  // 3. FETCH DATA (Limit 30 for thorough comparison)
+  // 3. FETCH DATA (Limit 30 for thorough processing analysis)
   const { data: cards, error: cardError } = await query.limit(30);
   let finalCards = cards || [];
 
-  // 4. SMART FALLBACK (If specific results are too thin)
+  // 4. SMART FALLBACK (Ensure the dataset is deep enough for ranking top-5 alternatives)
   if (finalCards.length < 5) {
-    const { data: recentCards } = await supabase
+    let fallbackQuery = supabase
       .from('credit_cards')
       .select('*')
-      .eq('is_verified', true)
+      .eq('is_verified', true);
+
+    // If it's a welcome offer query, try to keep finding items with welcome notes first
+    if (isWelcomeOfferQuery) {
+      fallbackQuery = fallbackQuery
+        .not('welcome_offer_details', 'is', null)
+        .neq('welcome_offer_details', '');
+    }
+
+    let { data: recentCards } = await fallbackQuery
       .order('last_scraped_at', { ascending: false })
-      .limit(15);
+      .limit(20);
+
+    // Extreme Fallback: If filtering strictly by welcome_offer_details yielded absolutely nothing,
+    // load regular cards so the action doesn't return an empty error response
+    if (isWelcomeOfferQuery && (!recentCards || recentCards.length === 0)) {
+      const { data: emergencyCards } = await supabase
+        .from('credit_cards')
+        .select('*')
+        .eq('is_verified', true)
+        .order('last_scraped_at', { ascending: false })
+        .limit(15);
+      recentCards = emergencyCards;
+    }
     
-    // Deduplicate results
+    // Deduplicate results safely by mapping unique card names
     const merged = [...finalCards, ...(recentCards || [])];
     finalCards = Array.from(new Map(merged.map(c => [c.card_name, c])).values());
   }
 
-  // 5. SUMMARY FOR AI
+  // 5. SUMMARY FOR AI ORCHESTRATION
   const distinctBanks = [...new Set(finalCards.map(c => c.bank_name))].filter(Boolean);
   const contextSummary = `Database loaded ${finalCards.length} cards from: ${distinctBanks.join(', ')}.`;
 
