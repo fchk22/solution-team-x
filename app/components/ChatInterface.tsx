@@ -11,6 +11,8 @@ interface ChatInterfaceProps {
   onSendMessage: (text: string) => void;
   setHistory: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
   t: any;
+  // 📊 Added to handle client-side metric conversions
+  onTrackEvent?: (eventType: 'page_view' | 'click_apply' | 'ai_card_query', cardId?: string | null) => Promise<void> | void;
 }
 
 export function ChatInterface({ 
@@ -21,8 +23,16 @@ export function ChatInterface({
   onReset, 
   onSendMessage, 
   setHistory, 
-  t 
+  t,
+  onTrackEvent // 👈 Destructured analytics listener tracking layer
 }: ChatInterfaceProps) {
+  
+  // Helper to normalize card names into uniform lowercase snake_case slugs matching database parameters
+  const getFormattedCardId = (name?: string): string | null => {
+    if (!name) return null;
+    return name.toLowerCase().trim().replace(/[^a-z0-9_\s]/g, '').replace(/\s+/g, '_');
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
       {/* Back to Tips button removed from here to ensure direct stream continuity */}
@@ -57,6 +67,13 @@ export function ChatInterface({
                             href={href} 
                             target="_blank" 
                             rel="noopener noreferrer" 
+                            onClick={() => {
+                              if (onTrackEvent) {
+                                // Fall back to message properties if the markdown injection context lacks unique identifiers
+                                const idCandidate = chat.cardName || linkText;
+                                onTrackEvent('click_apply', getFormattedCardId(idCandidate));
+                              }
+                            }}
                             className="inline-flex items-center gap-0.5 px-3 py-1 text-[11px] font-black rounded-full text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-md transition-all hover:-translate-y-0.5 no-underline mx-1.5 align-middle select-none"
                           >
                             {children}<span className="text-[9px]">↗</span>
@@ -97,13 +114,19 @@ export function ChatInterface({
                   href={chat.applicationUrl} 
                   target="_blank" 
                   rel="noopener noreferrer" 
+                  onClick={() => {
+                    // 📊 Track the outbound connection click for the overarching CTA component banner
+                    if (onTrackEvent) {
+                      onTrackEvent('click_apply', getFormattedCardId(chat.cardName));
+                    }
+                  }}
                   className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-rose-500 via-orange-500 to-amber-500 text-white rounded-2xl shadow-lg hover:-translate-y-1 transition-all"
                 >
                   <div className="bg-white/20 p-1.5 rounded-lg">
                     <Zap className="w-4 h-4 fill-white" />
                   </div>
                   <span className="text-sm sm:text-base font-black">
-                    {lang === 'en' ? `Apply ${chat.cardName} now` : `立即申請${chat.cardName}`}
+                    {lang === 'en' ? `Apply ${chat.cardName || ''} now` : `立即申請${chat.cardName || ''}`}
                   </span>
                   <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </a>

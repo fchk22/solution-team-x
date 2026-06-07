@@ -13,7 +13,8 @@ export default function HomePage() {
   const {
     lang, setLang, question, setQuestion, history, setHistory, loading, isSaving, isProfileOpen, setIsProfileOpen,
     user, userTier, activeView, setActiveView, userProfile, setUserProfile, isPending, startTransition, isProfileComplete,
-    handleLogout, saveProfile, sendMessage, loadCachedTip
+    handleLogout, saveProfile, sendMessage, loadCachedTip,
+    trackEvent // 📊 Extracted from the updated analytics tracking hook layer
   } = useChatSession()
 
   // Ensure t always resolves to a valid translation object based on current selected language state
@@ -65,8 +66,6 @@ export default function HomePage() {
               {quickTipSlugs.map((slug, index) => {
                 
                 // 🎯 Hardened Fallback Resolver:
-                // First try pulling from the array via index. If the array hasn't loaded yet,
-                // fall back immediately to an explicit string dictionary mapping supporting en, zh, and cn.
                 let tipLabel = slug;
                 
                 if (t?.quickTips && Array.isArray(t.quickTips) && t.quickTips[index]) {
@@ -88,12 +87,10 @@ export default function HomePage() {
                     key={slug}
                     onClick={() => {
                       setActiveView('CHAT');
-                      // ✨ Fixed: Passes both the database key slug AND the human FAQ display text to the newly updated hook handler
                       sendMessage(slug, tipLabel); 
                     }}
                     className="flex items-center justify-between p-3.5 bg-white border border-slate-200/80 rounded-2xl text-left text-xs font-black text-slate-700 hover:border-indigo-500 hover:text-indigo-600 shadow-sm hover:shadow-md transition-all group active:scale-[0.98]"
                   >
-                    {/* line-clamp-2 allows full descriptive questions to display cleanly without truncation breaks */}
                     <span className="line-clamp-2 pr-1 leading-relaxed">{tipLabel}</span>
                     <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-500 group-hover:translate-x-0.5 transition-all shrink-0" />
                   </button>
@@ -102,6 +99,7 @@ export default function HomePage() {
             </div>
           </div>
         ) : (
+          /* 📊 Passed down trackEvent directly so the application buttons can trace conversions */
           <ChatInterface 
             history={history}
             lang={lang}
@@ -111,6 +109,7 @@ export default function HomePage() {
             onSendMessage={sendMessage}
             setHistory={setHistory}
             t={t}
+            onTrackEvent={trackEvent} 
           />
         )}
       </main>

@@ -1,3 +1,4 @@
+// hooks/useChatSession.ts
 import { useState, useEffect, useTransition } from 'react'
 import { supabase, signOut } from '@/lib/auth'
 import { askCardExpert } from '@/lib/actions'
@@ -57,6 +58,35 @@ export function useChatSession() {
   );
 
   const userTier = !user ? 'GUEST' : isProfileComplete ? 'VIP' : 'BASIC';
+
+  // 📊 Helper 1: Reusable client-side session generator
+  const getSessionId = (): string => {
+    if (typeof window === 'undefined') return 'server_render';
+    let sessionId = localStorage.getItem('analytics_session_id');
+    if (!sessionId) {
+      sessionId = crypto.randomUUID();
+      localStorage.setItem('analytics_session_id', sessionId);
+    }
+    return sessionId;
+  };
+
+  // 📊 Helper 2: Central tracking function directly utilizing your existing lib/auth client injection
+  const trackEvent = async (eventType: 'page_view' | 'click_apply' | 'ai_card_query', cardId?: string | null) => {
+    try {
+      await supabase.from('analytics_events').insert({
+        event_type: eventType,
+        card_id: cardId || null,
+        session_id: getSessionId()
+      });
+    } catch (error) {
+      console.error('📊 Analytics logging skipped:', error);
+    }
+  };
+
+  // Trigger page_view automatically whenever this hook initializes on the client interface
+  useEffect(() => {
+    trackEvent('page_view');
+  }, []);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -122,6 +152,10 @@ export function useChatSession() {
 
     try {
       const targetDbKey = dbKeysMap[index] ? dbKeysMap[index] : questionText.trim();
+      
+      // 📊 Track that the user sent an intentional intent query via suggested card templates
+      trackEvent('ai_card_query', targetDbKey);
+
       const { data: cacheData, error: cacheError } = await supabase
         .from('card_tips_cache')
         .select('*')
@@ -159,19 +193,16 @@ export function useChatSession() {
     } finally { setLoading(false); }
   };
 
-  // ✨ Revised: Added optional second argument `displayText` to separate user UI representation from data keys
   const sendMessage = async (text: string, displayText?: string) => {
     if (!text.trim() || loading) return;
     setActiveView('CHAT');
     
     const trimmedText = text.trim();
     
-    // Check if the coming query matches any of our canonical backend cache identifiers
     const resolvedDbKey = dbKeysMap.includes(trimmedText) 
       ? trimmedText 
       : trimmedText;
 
-    // Display the pretty translation layout text if supplied, otherwise fall back gracefully
     const uiContent = displayText || resolvedDbKey;
     setHistory(prev => [...prev, { role: 'user', content: uiContent }]);
     
@@ -179,6 +210,9 @@ export function useChatSession() {
     setQuestion('');
     
     try {
+      // 📊 Track the text string the user entered manually into the text input frame
+      trackEvent('ai_card_query', resolvedDbKey.slice(0, 50));
+
       let cachedAnswer: string | null = null;
       let cachedSuggestions: string[] = [];
       let cachedCardName: string | undefined;
@@ -224,6 +258,6 @@ export function useChatSession() {
   return {
     lang, setLang, question, setQuestion, history, setHistory, loading, isSaving, isProfileOpen, setIsProfileOpen,
     user, userTier, activeView, setActiveView, userProfile, setUserProfile, isPending, startTransition, isProfileComplete,
-    handleLogout, saveProfile, sendMessage, loadCachedTip
+    handleLogout, saveProfile, sendMessage, loadCachedTip, trackEvent // 👈 Expose trackEvent so you can call it on the Apply buttons
   };
 }
