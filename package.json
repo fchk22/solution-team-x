@@ -10,6 +10,7 @@
     "scrape": "tsx scripts/extract-cards.ts"
   },
   "dependencies": {
+    "@google/genai": "^2.4.0",
     "@google/generative-ai": "^0.24.1",
     "@mendable/firecrawl-js": "^4.21.0",
     "@supabase/auth-helpers-nextjs": "^0.15.0",
@@ -19,6 +20,7 @@
     "next": "16.1.6",
     "openai": "^6.37.0",
     "pdf2json": "^4.0.2",
+    "playwright": "^1.60.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-markdown": "^10.1.0"
