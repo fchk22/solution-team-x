@@ -103,7 +103,7 @@ export function useChatSession() {
             employment_type: profile.employment_type || 'Full-time',
             ownedCards: profile.owned_cards || [],
             primaryBank: profile.primary_bank || '',
-            bankProducts: profile.bank_products || [],
+            bankProducts: profile.bank_products || [], // ✅ Fixed: Changed from bank_products to camelCase bankProducts
             language: (profile.preferred_language as any) || 'en',
             primarySpend: profile.primary_spend || ''
           })
@@ -133,7 +133,7 @@ export function useChatSession() {
         employment_type: userProfile.employment_type, 
         owned_cards: userProfile.ownedCards,
         primary_bank: userProfile.primaryBank, 
-        bank_products: userProfile.bankProducts,
+        bank_products: userProfile.bankProducts, // This maps correctly to your DB schema field
         preferred_language: lang,
         updated_at: new Date().toISOString(),
       });
@@ -258,6 +258,6 @@ export function useChatSession() {
   return {
     lang, setLang, question, setQuestion, history, setHistory, loading, isSaving, isProfileOpen, setIsProfileOpen,
     user, userTier, activeView, setActiveView, userProfile, setUserProfile, isPending, startTransition, isProfileComplete,
-    handleLogout, saveProfile, sendMessage, loadCachedTip, trackEvent // 👈 Expose trackEvent so you can call it on the Apply buttons
+    handleLogout, saveProfile, sendMessage, loadCachedTip, trackEvent
   };
 }

@@ -1,3 +1,4 @@
+// components/ChatInterface.tsx
 import ReactMarkdown from 'react-markdown'
 import { Bot, Zap, ChevronRight, User } from 'lucide-react'
 import { type ChatMessage } from '../hooks/useChatSession'
@@ -69,8 +70,21 @@ export function ChatInterface({
                             rel="noopener noreferrer" 
                             onClick={() => {
                               if (onTrackEvent) {
-                                // Fall back to message properties if the markdown injection context lacks unique identifiers
-                                const idCandidate = chat.cardName || linkText;
+                                // 🎯 INTELLIGENT ROUTING FALLBACK LAYER:
+                                // If explicit card property names are absent, examine message context strings
+                                let idCandidate = chat.cardName;
+
+                                if (!idCandidate) {
+                                  const textBody = (chat.content || '').toLowerCase();
+                                  if (textBody.includes('hang seng') || textBody.includes('恒生') || textBody.includes('恆生')) {
+                                    idCandidate = 'hang_seng_enj_mastercard'; // Or your specific database slug match
+                                  } else if (textBody.includes('standard chartered') || textBody.includes('渣打') || textBody.includes('cathay')) {
+                                    idCandidate = 'standard_chartered_cathay_mastercard';
+                                  } else {
+                                    idCandidate = linkText;
+                                  }
+                                }
+
                                 onTrackEvent('click_apply', getFormattedCardId(idCandidate));
                               }
                             }}
