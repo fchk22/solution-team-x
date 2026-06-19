@@ -1,6 +1,16 @@
 // lib/auth.ts
 import { supabase } from './supabaseClient';
 
+// Export the supabase client so other files can import it
+export { supabase };
+
+// Sign out function
+export const signOut = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) console.error('Error signing out:', error.message);
+};
+
+// Existing Google sign-in function
 export const signInWithGoogle = async (nextPath = '') => {
   const getURL = () => {
     // 1. If we are in the browser, always trust the actual current URL
