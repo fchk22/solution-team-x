@@ -1,39 +1,25 @@
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
 // lib/auth.ts
+import { supabase } from './supabaseClient';
 
-export const signInWithGoogle = async () => {
-  // This detects if you are on localhost or the live domain automatically
+export const signInWithGoogle = async (nextPath = '') => {
   const getURL = () => {
-    let url =
-      process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this in your .env for production
-      process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel
-      window.location.origin; // Fallback to current browser origin
-    
-    // Ensure the URL ends without a slash for consistency
-    url = url.charAt(url.length - 1) === '/' ? url.slice(0, -1) : url;
-    return url;
+    // 1. If we are in the browser, always trust the actual current URL
+    if (typeof window !== 'undefined') {
+      return window.location.origin; 
+    }
+    // 2. Only use the environment variable if we are on the server (SSR/API routes)
+    return process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
   };
+
+  const url = getURL();
 
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      // This is the key change: 
-      // It tells Google: "Once done, send them back to exactly where they came from."
-      redirectTo: getURL(),
+      // Force the redirect to stay on the origin we just calculated
+      redirectTo: `${url}${nextPath}`,
     },
   });
 
   if (error) console.error('Error logging in:', error.message);
-};
-
-// ADD THIS EXPORT
-export const signOut = async () => {
-  const { error } = await supabase.auth.signOut();
-  if (error) console.error('Error signing out:', error.message);
 };
