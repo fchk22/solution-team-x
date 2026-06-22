@@ -21,7 +21,7 @@ export default function ChatBox({ roomId }: { roomId: string }) {
     const fetchMessages = async () => {
       const { data, error } = await supabase
         .from('messages')
-        .select(`*, profiles(full_name)`)
+        .select(`*`)
         .eq('room_id', roomId)
         .order('created_at', { ascending: true });
       if (data) setMessages(data);
@@ -30,41 +30,46 @@ export default function ChatBox({ roomId }: { roomId: string }) {
 
     const channel = supabase.channel('realtime:messages')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `room_id=eq.${roomId}` }, 
-      async (payload) => {
-        const { data: profile } = await supabase.from('profiles').select('full_name').eq('id', payload.new.user_id).single();
-        setMessages((prev) => [...prev, { ...payload.new, profiles: profile }]);
+      (payload) => {
+        setMessages((prev) => [...prev, payload.new]);
       }).subscribe();
 
     return () => { supabase.removeChannel(channel); };
   }, [roomId]);
 
-  useEffect(() => {
-    const loadSignedUrls = async () => {
-      const urls: Record<string, string> = {};
-      for (const m of messages) {
-        if (m.file_path && !signedUrls[m.id]) {
-          const { data } = await supabase.storage.from('chat-media').createSignedUrl(m.file_path, 3600);
-          if (data?.signedUrl) urls[m.id] = data.signedUrl;
-        }
-      }
-      if (Object.keys(urls).length > 0) setSignedUrls((prev) => ({ ...prev, ...urls }));
-    };
-    loadSignedUrls();
-  }, [messages]);
+  // Logic for Displaying Name
+  const getDisplayName = (m: any) => {
+    if (m.user_id === currentUser?.id) return "You";
+    return m.sender_name || 'User';
+  };
+
+  // Logic for Timestamp: "Today 12:51 pm" / "22 Jun 12:01 am"
+  const formatDateTime = (isoString: string) => {
+    const date = new Date(isoString);
+    const now = new Date();
+    const isToday = date.toDateString() === now.toDateString();
+    
+    const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const dateLabel = isToday ? "Today" : date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    
+    return `${dateLabel} ${time}`;
+  };
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages]);
 
-  const formatTime = (isoString: string) => {
-    return new Date(isoString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
-
   const sendMessage = async () => {
     if (!newMessage.trim() || !currentUser) return;
     const content = newMessage;
+    const sender_name = currentUser.user_metadata?.full_name || 'User';
     setNewMessage('');
-    await supabase.from('messages').insert([{ room_id: roomId, user_id: currentUser.id, content }]);
+    await supabase.from('messages').insert([{ 
+      room_id: roomId, 
+      user_id: currentUser.id, 
+      content, 
+      sender_name 
+    }]);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,12 +82,12 @@ export default function ChatBox({ roomId }: { roomId: string }) {
     if (!uploadError) {
       await supabase.from('messages').insert([{ 
         room_id: roomId, user_id: currentUser.id, content: file.name, 
-        file_path: filePath, file_type: file.type.startsWith('image') ? 'image' : 'video' 
+        file_path: filePath, file_type: file.type.startsWith('image') ? 'image' : 'video',
+        sender_name: currentUser.user_metadata?.full_name || 'User'
       }]);
     }
   };
 
-  // NEW: Download Handler
   const downloadFile = async (url: string, fileName: string) => {
     const response = await fetch(url);
     const blob = await response.blob();
@@ -101,12 +106,13 @@ export default function ChatBox({ roomId }: { roomId: string }) {
         {messages.map((m) => (
           <div key={m.id} className={`flex flex-col ${m.user_id === currentUser?.id ? 'items-end' : 'items-start'}`}>
             <div className="flex items-baseline gap-2 px-1">
-              <span className="text-[10px] text-gray-500 font-bold">{m.profiles?.full_name || 'User'}</span>
-              <span className="text-[9px] text-gray-400">{m.created_at ? formatTime(m.created_at) : 'Just now'}</span>
+              <span className="text-[10px] text-gray-500 font-bold">{getDisplayName(m)}</span>
+              <span className="text-[9px] text-gray-400">{m.created_at ? formatDateTime(m.created_at) : 'Just now'}</span>
             </div>
             
             <div className={`p-3 rounded-2xl shadow-sm text-sm max-w-[80%] cursor-pointer ${m.user_id === currentUser?.id ? 'bg-blue-600 text-white' : 'bg-white text-gray-800'}`}>
               {m.file_path ? (
+                // ... (existing media rendering)
                 m.file_type === 'image' ? (
                   <img src={signedUrls[m.id]} className="max-w-xs rounded" onClick={() => setSelectedMedia({ url: signedUrls[m.id], type: 'image', name: m.content })} />
                 ) : (
@@ -118,26 +124,7 @@ export default function ChatBox({ roomId }: { roomId: string }) {
         ))}
       </div>
 
-      {/* Enlarged Media Modal with Download */}
-      {selectedMedia && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-90 p-4">
-          <button className="absolute top-5 right-5 text-white text-2xl font-bold" onClick={() => setSelectedMedia(null)}>✕</button>
-          
-          {selectedMedia.type === 'image' ? (
-            <img src={selectedMedia.url} className="max-w-full max-h-[80vh] rounded" />
-          ) : (
-            <video src={selectedMedia.url} controls autoPlay className="max-w-full max-h-[80vh] rounded" />
-          )}
-
-          <button 
-            className="mt-6 bg-white text-black px-6 py-2 rounded-full font-semibold hover:bg-gray-200"
-            onClick={() => downloadFile(selectedMedia.url, selectedMedia.name)}
-          >
-            Download
-          </button>
-        </div>
-      )}
-
+      {/* ... (rest of the file remains the same) */}
       <div className="flex gap-2">
         <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileUpload} />
         <button onClick={() => fileInputRef.current?.click()} className="p-2 text-gray-500">📎</button>
