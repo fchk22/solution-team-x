@@ -10,7 +10,7 @@ export const signOut = async () => {
   if (error) console.error('Error signing out:', error.message);
 };
 
-// Existing Google sign-in function
+// Updated Google sign-in function with account selection prompt
 export const signInWithGoogle = async (nextPath = '') => {
   const getURL = () => {
     // 1. If we are in the browser, always trust the actual current URL
@@ -26,8 +26,11 @@ export const signInWithGoogle = async (nextPath = '') => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      // Force the redirect to stay on the origin we just calculated
       redirectTo: `${url}${nextPath}`,
+      queryParams: {
+        // This forces Google to show the account chooser dialog
+        prompt: 'select_account',
+      },
     },
   });
 

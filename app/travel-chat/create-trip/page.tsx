@@ -29,16 +29,19 @@ export default function CreateTripPage() {
     if (!user) return;
     setLoading(true);
 
+    // DEBUG: Log the data being sent
+    const roomData = {
+      name: name,
+      hotel_name: hotelName,
+      hotel_address: hotelAddress,
+      created_by: user.id
+    };
+    console.log("DEBUG: Attempting to create room with user_id:", user.id);
+    console.log("DEBUG: Room data object:", roomData);
+
     const { data, error } = await supabase
       .from('travel_rooms')
-      .insert([
-        {
-          name: name,
-          hotel_name: hotelName,
-          hotel_address: hotelAddress,
-          created_by: user.id
-        }
-      ])
+      .insert([roomData])
       .select();
 
     if (error) {
